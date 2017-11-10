@@ -11,8 +11,9 @@
 基本的に僕のブランチ名は`gn5r`です
 
 ## Gitの流れ
-
-![](./img/project_image.jpg)<br>
+<div align="center">
+<img src="./img/project_image.jpg" alt="git操作イメージ">
+</div>
 
 ## Gitコマンド使い方(基礎部分)
 
