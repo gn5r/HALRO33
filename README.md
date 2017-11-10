@@ -23,7 +23,9 @@ Windows環境なら**Cmder(full version)** をダウンロードしておく。<
 
 `git config --global user.email "exsample@email.com"`<br>
 `git config --global user.name "github user name"`<br>
-上記２つのconfigを設定してgitの初期設定は完了<br>
+`git config --global credential.helper store(Windows環境ならwincred)`<br>
+
+上記3つのconfigを設定してgitの初期設定は完了<br>
 
 初期設定が完了したらGitリポジトリ(ディレクトリ)をダウンロードするフォルダを予め作成しておく<br>
 一例ではLinux環境なので適宜読み替えてください。<br>
@@ -91,5 +93,4 @@ gitコマンドについては全て`git 〜`のコマンドです
 
 なお、Cmderの使い方として**矢印⇧**で履歴が使える<br>
 **TABキー** であらゆる候補がでる(長いブランチ名やディレクトリ名の時に一々て入力せずに済む)<br>
-ユーザー名・パスワード保存:`git config --global credential.helper store(wincred)`windowsはstoreの部分をwincredと打ち込めばおｋ<br>
 何かわからなければ僕に聞いてください.
