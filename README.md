@@ -39,6 +39,18 @@ Gitリポジトリを追加しダウンロード<br>
 `git push リモート名 name(さっき作成したブランチ名)`<br>
 これで晴れてアップロードが完了する
 
+### 変更内容を master branch に適用させる
+
+適用させる前に、適用していいかどうかをmasterに見てもらいます。<br>
+**issue** という課題のようなものを提示しておいたので、まずそれを参照します。<br>
+- github web上から **Pull Rewuests** をクリック
+- 画面左側にある**new pull request**を選択
+- 画面中央付近に**base master ... compare:branch name**があるので自身のブランチ名を選択(規定で自身のブランチが選択されていると思う)
+- 変更・修正部分を明記する(issueの番号も明記 **#1** など また、Markdown形式なので改行など注意)
+- **create pull request** をクリックしてリクエスト送信
+
+以上を行いmasterがリクエストを許可すれば、変更・修正内容がmasterに適用される。
+
 ## Git&shellコマンド集
 
 | Command Name     | 説明     |
