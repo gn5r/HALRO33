@@ -18,7 +18,14 @@
 
 ### Git初期設定〜ダウンロード編
 
-まずGitリポジトリ(ディレクトリ)をダウンロードするフォルダを予め作成しておく<br>
+Windows環境なら**Cmder(full version)** をダウンロードしておく。<br>
+`git --version` を打ち込み正しくgitが使えるかどうかを検証しておく。<br>
+
+`git config --global user.email "exsample@email.com"`<br>
+`git config --global user.name "github user name"`<br>
+上記２つのconfigを設定してgitの初期設定は完了<br>
+
+初期設定が完了したらGitリポジトリ(ディレクトリ)をダウンロードするフォルダを予め作成しておく<br>
 一例ではLinux環境なので適宜読み替えてください。<br>
 `/home/gn5r/←カレントディレクトリ $ mkdir Test`<br>
 カレントディレクトリを作成したフォルダへ移動<br>
@@ -48,10 +55,10 @@ Gitリポジトリを追加しダウンロード<br>
 - github web上から **Pull Rewuests** をクリック
 - 画面左側にある**new pull request**を選択
 - 画面中央付近に**base master ... compare:branch name**があるので自身のブランチ名を選択(規定で自身のブランチが選択されていると思う)
-- 変更・修正部分を明記する(issueの番号も明記 **#1** など また、Markdown形式なので改行など注意)
+- 変更・修正部分を明記する(issueの番号も明記 **#1** など。また、Markdown形式なので改行など注意)
 - **create pull request** をクリックしてリクエスト送信
 
-以上を行いmasterがリクエストを許可すれば、変更・修正内容がmasterに適用される。
+以上を行い**リクエスト送信者以外の誰かが**許可(確認)をすると、マージ(結合)が可能となる。<br>
 
 ## Git&shellコマンド集
 
