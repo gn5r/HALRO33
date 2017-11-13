@@ -1,7 +1,8 @@
 # チーム逆万枚就プレ企画
 
 更新状況
-- 2017年11月11日 リポジトリ構成見直し、プロジェクト統一
+- 2017年11月11日(土) リポジトリ構成見直し、プロジェクト統一
+- 2017年11月13日(月) create magro branch & added cad directory
 
 デザイン面でお二人にやって頂くかもしれないのでよろしく。<br>
 ブランチ名は各自で好きなように設定して構わないけど、３人がわかる範囲内でおねがい<br>
@@ -21,6 +22,8 @@
 Windows環境なら**Cmder(full version)** をダウンロードしておく。<br>
 `git --version` を打ち込み正しくgitが使えるかどうかを検証しておく。<br>
 
+コマンドプロンプトを管理者権限で実行<br>
+`cmder /REGISTER ALL`
 `git config --global user.email "exsample@email.com"`<br>
 `git config --global user.name "github user name"`<br>
 `git config --global credential.helper store(Windows環境ならwincred)`<br>
@@ -92,5 +95,5 @@ gitコマンドについては全て`git 〜`のコマンドです
 | remote remove name | nameで設定したURL削除 |
 
 なお、Cmderの使い方として**矢印⇧**で履歴が使える<br>
-**TABキー** であらゆる候補がでる(長いブランチ名やディレクトリ名の時に一々て入力せずに済む)<br>
+**TABキー** であらゆる候補がでる(長いブランチ名やディレクトリ名の時に一々手入力せずに済む)<br>
 何かわからなければ僕に聞いてください.
