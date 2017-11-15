@@ -23,17 +23,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        final Handler handler =new Handler();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                (new UDPGetTask(MainActivity.this)).execute();
-                handler.postDelayed(this,1000);
-                Log.d("info","実行した");
-            }
-        };
-        handler.post(runnable);
-//        new UDPGetTask(this).execute();
+        UDPReceiveThread receiveThread = new UDPReceiveThread(this);
+        receiveThread.start();
     }
 
     public void sendMessage(View view) {
