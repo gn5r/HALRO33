@@ -4,10 +4,11 @@
 - 2017年11月11日(土) リポジトリ構成見直し、プロジェクト統一
 - 2017年11月13日(月) create magro branch & added cad directory
 - 2017年11月14日(火) AndroidとArduinoのサンプルを再編成 UDP実装
+- 2017年11月16日(木) AndroidSapmleにてUDP受信機能実装。IPAddressとPortの表示
 
-デザイン面でお二人にやって頂くかもしれないのでよろしく。<br>
 ブランチ名は各自で好きなように設定して構わないけど、３人がわかる範囲内でおねがい<br>
 基本的に僕のブランチ名は`gn5r`です<br>
+また、パソコンを使い分ける時があるので`shangyuan.tuolang`を使う時もあります。<br>
 `master`ブランチはpull専用のブランチにしました。<br>
 間違えてmasterブランチでpushしてもエラー吐きます。
 
