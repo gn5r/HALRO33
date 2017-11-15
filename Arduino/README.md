@@ -1,7 +1,7 @@
 ### Arduino 設計図
 
 
-![](./Arduino_img/circuit diagram.jpg)
+![](./Arduino_img/circuit_diagram.jpg)
 
 
 
