@@ -1,25 +1,30 @@
 package via.gn5r.com.androidsample;
 
+import android.content.DialogInterface;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Serializable {
     private Handler handler;
+    private String IPAddress, Port;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +32,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main);
 
         handler = new Handler();
-        viewIPAddress();
-
-        UDPReceiveThread receiveThread = new UDPReceiveThread(this);
-        receiveThread.start();
+        CustomDialog customDialog = new CustomDialog();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("MainActivity",MainActivity.this);
+        customDialog.setArguments(bundle);
+        customDialog.show(getFragmentManager(),"aa");
     }
 
-    private void viewIPAddress() {
+    public void viewIPAddress() {
          /* IPアドレスの表示  */
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         WifiInfo wifIinfo = wifiManager.getConnectionInfo();
@@ -42,14 +48,14 @@ public class MainActivity extends AppCompatActivity {
                 + ((address >> 8) & 0xFF) + "." + ((address >> 16) & 0xFF)
                 + "." + ((address >> 24) & 0xFF);
         TextView ipView = (TextView) findViewById(R.id.ip_address);
-        ipView.setText("IPアドレス:" + IPAddress + "\nポート:5555");
+        ipView.setText("IPアドレス:" + IPAddress + "\nポート:" + Port);
     }
 
     public void sendMessage(View view) {
         EditText editText = (EditText) findViewById(R.id.editMessage);
         String message = editText.getText().toString();
         try {
-            new UDPSendTask(MainActivity.this, "192.168.0.189", 5555).execute(message);
+            new UDPSendTask(MainActivity.this, IPAddress, Integer.parseInt(Port)).execute(message);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -76,5 +82,13 @@ public class MainActivity extends AppCompatActivity {
                 showText("受信データ:" + text);
             }
         });
+    }
+
+    public void setIPAddress(String IPAddress) {
+        this.IPAddress = IPAddress;
+    }
+
+    public void setPort(String port) {
+        Port = port;
     }
 }

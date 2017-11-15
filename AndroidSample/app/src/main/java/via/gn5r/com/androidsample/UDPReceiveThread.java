@@ -12,10 +12,10 @@ public class UDPReceiveThread extends Thread {
     private MainActivity mainActivity = null;
     private DatagramSocket socket = null;
 
-    public UDPReceiveThread(MainActivity mainActivity) {
+    public UDPReceiveThread(MainActivity mainActivity,int comPort) {
         this.mainActivity = mainActivity;
         try {
-            socket = new DatagramSocket(5555);
+            socket = new DatagramSocket(comPort);
         } catch (SocketException e) {
             e.printStackTrace();
         }
