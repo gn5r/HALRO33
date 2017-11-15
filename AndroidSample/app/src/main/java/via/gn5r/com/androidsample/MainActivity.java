@@ -1,12 +1,14 @@
 package via.gn5r.com.androidsample;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,11 +34,23 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         setContentView(R.layout.main);
 
         handler = new Handler();
-        CustomDialog customDialog = new CustomDialog();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("MainActivity",MainActivity.this);
-        customDialog.setArguments(bundle);
-        customDialog.show(getFragmentManager(),"aa");
+
+        SharedPreferences info = getSharedPreferences("Information", MODE_PRIVATE);
+
+        setIPAddress(info.getString("IPAddress",null));
+        setPort(info.getString("comPort",null));
+
+        if(!TextUtils.isEmpty(this.IPAddress) && !TextUtils.isEmpty(this.Port)){
+            UDPReceiveThread receiveThread = new UDPReceiveThread(this, Integer.parseInt(Port));
+            receiveThread.start();
+            viewIPAddress();
+        }else{
+            CustomDialog customDialog = new CustomDialog();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("MainActivity",MainActivity.this);
+            customDialog.setArguments(bundle);
+            customDialog.show(getFragmentManager(),"Settings");
+        }
     }
 
     public void viewIPAddress() {
@@ -89,6 +103,14 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     }
 
     public void setPort(String port) {
-        Port = port;
+        this.Port = port;
+    }
+
+    public void saveInformation(String IPAddress,String comPort) {
+        SharedPreferences preferences = getSharedPreferences("Information", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("IPAddress", this.IPAddress);
+        editor.putString("comPort",this.Port);
+        editor.apply();
     }
 }
