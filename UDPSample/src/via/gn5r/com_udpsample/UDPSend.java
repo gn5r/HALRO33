@@ -1,4 +1,4 @@
-package udpsend_test;
+package via.gn5r.com_udpsample;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

@@ -4,10 +4,11 @@
 - 2017年11月11日(土) リポジトリ構成見直し、プロジェクト統一
 - 2017年11月13日(月) create magro branch & added cad directory
 - 2017年11月14日(火) AndroidとArduinoのサンプルを再編成 UDP実装
+- 2017年11月16日(木) AndroidSapmleにてUDP受信機能実装。IPAddressとPortの表示
 
-デザイン面でお二人にやって頂くかもしれないのでよろしく。<br>
 ブランチ名は各自で好きなように設定して構わないけど、３人がわかる範囲内でおねがい<br>
 基本的に僕のブランチ名は`gn5r`です<br>
+また、パソコンを使い分ける時があるので`shangyuan.tuolang`を使う時もあります。<br>
 `master`ブランチはpull専用のブランチにしました。<br>
 間違えてmasterブランチでpushしてもエラー吐きます。
 
@@ -24,7 +25,7 @@ Windows環境なら**Cmder(full version)** をダウンロードしておく。<
 `git --version` を打ち込み正しくgitが使えるかどうかを検証しておく。<br>
 
 コマンドプロンプトを管理者権限で実行<br>
-`cmder /REGISTER ALL`
+`cmder /REGISTER ALL`<br>
 `git config --global user.email "exsample@email.com"`<br>
 `git config --global user.name "github user name"`<br>
 `git config --global credential.helper store(Windows環境ならwincred)`<br>
@@ -94,6 +95,13 @@ gitコマンドについては全て`git 〜`のコマンドです
 | status | 変更の状態を見れる(何が変更されたかなど)|
 | remote -v      | リモートURLの確認 |
 | remote remove name | nameで設定したURL削除 |
+
+## UDPSample使い方
+
+`cd UDPSample/jarFiles`などを打ち込んでおいて、ディレクトリに移動しておく。<br>
+`java -jar udpSample.jar IPAddress port`を打ち込むとjarファイルを実行できる
+- IPAddress(送信先のIPAddress)
+- Port(UDP通信のPort設定)
 
 なお、Cmderの使い方として**矢印⇧**で履歴が使える<br>
 **TABキー** であらゆる候補がでる(長いブランチ名やディレクトリ名の時に一々手入力せずに済む)<br>
