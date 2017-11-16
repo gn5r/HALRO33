@@ -1,10 +1,12 @@
 package via.gn5r.com.androidsample;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Process;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     @Override
     protected void onDestroy() {
         receiveThread.onStop();
+
         super.onDestroy();
     }
 
@@ -66,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         // バックキーの長押しに対する処理
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
             showText("終了します");
-            finish();
+            Process.killProcess(Process.myPid());
             return true;
         }
 
@@ -113,7 +116,12 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             public void run() {
                 TextView textView = (TextView) findViewById(R.id.textView);
                 textView.setText(text);
-                showText("受信データ:" + text);
+
+                if(text.matches("test")){
+                    showText("テスト");
+                }else{
+                    showText("受信データ:" + text);
+                }
             }
         });
     }
