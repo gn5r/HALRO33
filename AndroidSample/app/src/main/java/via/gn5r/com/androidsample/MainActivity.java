@@ -1,32 +1,25 @@
 package via.gn5r.com.androidsample;
 
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.Handler;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.SocketException;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
     private Handler handler;
     private String IPAddress, Port;
+    private UDPReceiveThread receiveThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +34,43 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         setPort(info.getString("comPort",null));
 
         if(!TextUtils.isEmpty(this.IPAddress) && !TextUtils.isEmpty(this.Port)){
-            UDPReceiveThread receiveThread = new UDPReceiveThread(this, Integer.parseInt(Port));
-            receiveThread.start();
-            viewIPAddress();
+
+            if(receiveThread != null){
+                receiveThread.onStop();
+                receiveThread = null;
+            }else {
+                receiveThread = new UDPReceiveThread(this, Integer.parseInt(Port));
+                receiveThread.start();
+                viewIPAddress();
+            }
+
         }else{
             CustomDialog customDialog = new CustomDialog();
             Bundle bundle = new Bundle();
             bundle.putSerializable("MainActivity",MainActivity.this);
             customDialog.setArguments(bundle);
             customDialog.show(getFragmentManager(),"Settings");
+
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        receiveThread.onStop();
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+
+        // バックキーの長押しに対する処理
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            showText("終了します");
+            finish();
+            return true;
+        }
+
+        return super.onKeyLongPress(keyCode, event);
     }
 
     public void viewIPAddress() {

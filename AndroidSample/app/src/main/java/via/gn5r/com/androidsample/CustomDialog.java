@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
 
 /**
  * Created by gn5r on 17/11/16.
@@ -27,18 +26,17 @@ public class CustomDialog extends DialogFragment {
 
         AlertDialog.Builder customDialog = new AlertDialog.Builder(getActivity());
 
-        mainActivity = (MainActivity)getArguments().getSerializable("MainActivity");
+        mainActivity = (MainActivity) getArguments().getSerializable("MainActivity");
 
-        LayoutInflater inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View content = inflater.inflate(R.layout.custom_dialog, null);
 
         customDialog.setTitle("UDP通信設定");
         customDialog.setView(content);
 
-        final EditText editIPAddress = (EditText)content.findViewById(R.id.editIPAddress);
-        final EditText editPort = (EditText)content.findViewById(R.id.editPort);
+        final EditText editIPAddress = (EditText) content.findViewById(R.id.editIPAddress);
+        final EditText editPort = (EditText) content.findViewById(R.id.editPort);
         final CheckBox checkBox = (CheckBox)content.findViewById(R.id.checkSave);
-
 
         customDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -48,21 +46,14 @@ public class CustomDialog extends DialogFragment {
 
                 try {
                     if (!TextUtils.isEmpty(IPAddress) && !TextUtils.isEmpty(comPort)) {
-                        checkBox.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                if(checkBox.isChecked() == true){
-                                    mainActivity.saveInformation(IPAddress,comPort);
-                                    Toast.makeText(mainActivity, "保存しました", Toast.LENGTH_SHORT).show();
-                                }else{
-                                    Toast.makeText(mainActivity, "保存しません", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
 
                         mainActivity.setIPAddress(IPAddress);
                         mainActivity.setPort(comPort);
-
+                        boolean isChecked = checkBox.isChecked();
+                        if(isChecked == true){
+                            mainActivity.saveInformation(IPAddress,comPort);
+                            mainActivity.showText("保存しました");
+                        }
                         UDPReceiveThread receiveThread = new UDPReceiveThread(mainActivity, Integer.parseInt(comPort));
                         receiveThread.start();
                         mainActivity.viewIPAddress();
