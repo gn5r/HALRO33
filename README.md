@@ -100,10 +100,7 @@ gitコマンドについては全て`git 〜`のコマンドです
 
 ## UDPSample使い方
 
-`cd UDPSample/jarFiles`などを打ち込んでおいて、ディレクトリに移動しておく。<br>
-`java -jar udpSample.jar IPAddress port`を打ち込むとjarファイルを実行できる
-- IPAddress(送信先のIPAddress)
-- Port(UDP通信のPort設定)
+- [UDPSample使い方](./UDPSample/README.md)
 
 なお、Cmderの使い方として**矢印⇧**で履歴が使える<br>
 **TABキー** であらゆる候補がでる(長いブランチ名やディレクトリ名の時に一々手入力せずに済む)<br>
