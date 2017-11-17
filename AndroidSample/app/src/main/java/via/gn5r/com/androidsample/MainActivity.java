@@ -30,28 +30,28 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         handler = new Handler();
 
-        SharedPreferences info = getSharedPreferences("Information", MODE_PRIVATE);
+//        SharedPreferences info = getSharedPreferences("Information", MODE_PRIVATE);
 
-        setIPAddress(info.getString("IPAddress",null));
-        setPort(info.getString("comPort",null));
+//        setIPAddress(info.getString("IPAddress", null));
+//        setPort(info.getString("comPort", null));
 
-        if(!TextUtils.isEmpty(this.IPAddress) && !TextUtils.isEmpty(this.Port)){
+        if (!TextUtils.isEmpty(this.IPAddress) && !TextUtils.isEmpty(this.Port)) {
 
-            if(receiveThread != null){
+            if (receiveThread != null) {
                 receiveThread.onStop();
                 receiveThread = null;
-            }else {
+            } else {
                 receiveThread = new UDPReceiveThread(this, Integer.parseInt(Port));
                 receiveThread.start();
                 viewIPAddress();
             }
 
-        }else{
+        } else {
             CustomDialog customDialog = new CustomDialog();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("MainActivity",MainActivity.this);
+            bundle.putSerializable("MainActivity", MainActivity.this);
             customDialog.setArguments(bundle);
-            customDialog.show(getFragmentManager(),"Settings");
+            customDialog.show(getFragmentManager(), "Settings");
 
         }
     }
@@ -117,10 +117,28 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 TextView textView = (TextView) findViewById(R.id.textView);
                 textView.setText(text);
 
-                if(text.matches("test")){
-                    showText("テスト");
-                }else{
-                    showText("受信データ:" + text);
+                if (!TextUtils.isEmpty(text)) {
+                    switch (text) {
+                        case "maxbet":
+                            showText("レバーに気合を入れろ！");
+                            break;
+                        case "lever":
+                            showText("強請るな、勝ち取れ。さすれば道は開かれん！");
+                            break;
+                        case "left":
+                            showText("左！");
+                            break;
+                        case "center":
+                            showText("中！");
+                            break;
+                        case "right":
+                            showText("右！");
+                            break;
+
+                        default:
+                            showText("受信データ:" + text);
+                            break;
+                    }
                 }
             }
         });
@@ -134,11 +152,11 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         this.Port = port;
     }
 
-    public void saveInformation(String IPAddress,String comPort) {
+    public void saveInformation(String IPAddress, String comPort) {
         SharedPreferences preferences = getSharedPreferences("Information", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("IPAddress", this.IPAddress);
-        editor.putString("comPort",this.Port);
+        editor.putString("comPort", this.Port);
         editor.apply();
     }
 }
