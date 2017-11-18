@@ -1,32 +1,27 @@
 package via.gn5r.com.androidsample;
 
-import android.content.DialogInterface;
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.Handler;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Process;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.SocketException;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
     private Handler handler;
     private String IPAddress, Port;
+    private UDPReceiveThread receiveThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,22 +30,50 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         handler = new Handler();
 
-        SharedPreferences info = getSharedPreferences("Information", MODE_PRIVATE);
+//        SharedPreferences info = getSharedPreferences("Information", MODE_PRIVATE);
 
-        setIPAddress(info.getString("IPAddress",null));
-        setPort(info.getString("comPort",null));
+//        setIPAddress(info.getString("IPAddress", null));
+//        setPort(info.getString("comPort", null));
 
-        if(!TextUtils.isEmpty(this.IPAddress) && !TextUtils.isEmpty(this.Port)){
-            UDPReceiveThread receiveThread = new UDPReceiveThread(this, Integer.parseInt(Port));
-            receiveThread.start();
-            viewIPAddress();
-        }else{
+        if (!TextUtils.isEmpty(this.IPAddress) && !TextUtils.isEmpty(this.Port)) {
+
+            if (receiveThread != null) {
+                receiveThread.onStop();
+                receiveThread = null;
+            } else {
+                receiveThread = new UDPReceiveThread(this, Integer.parseInt(Port));
+                receiveThread.start();
+                viewIPAddress();
+            }
+
+        } else {
             CustomDialog customDialog = new CustomDialog();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("MainActivity",MainActivity.this);
+            bundle.putSerializable("MainActivity", MainActivity.this);
             customDialog.setArguments(bundle);
-            customDialog.show(getFragmentManager(),"Settings");
+            customDialog.show(getFragmentManager(), "Settings");
+
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        receiveThread.onStop();
+
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+
+        // バックキーの長押しに対する処理
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            showText("終了します");
+            Process.killProcess(Process.myPid());
+            return true;
+        }
+
+        return super.onKeyLongPress(keyCode, event);
     }
 
     public void viewIPAddress() {
@@ -93,7 +116,30 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             public void run() {
                 TextView textView = (TextView) findViewById(R.id.textView);
                 textView.setText(text);
-                showText("受信データ:" + text);
+
+                if (!TextUtils.isEmpty(text)) {
+                    switch (text) {
+                        case "maxbet":
+                            showText("レバーに気合を入れろ！");
+                            break;
+                        case "lever":
+                            showText("強請るな、勝ち取れ。さすれば道は開かれん！");
+                            break;
+                        case "left":
+                            showText("左！");
+                            break;
+                        case "center":
+                            showText("中！");
+                            break;
+                        case "right":
+                            showText("右！");
+                            break;
+
+                        default:
+                            showText("受信データ:" + text);
+                            break;
+                    }
+                }
             }
         });
     }
@@ -106,11 +152,11 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         this.Port = port;
     }
 
-    public void saveInformation(String IPAddress,String comPort) {
+    public void saveInformation(String IPAddress, String comPort) {
         SharedPreferences preferences = getSharedPreferences("Information", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("IPAddress", this.IPAddress);
-        editor.putString("comPort",this.Port);
+        editor.putString("comPort", this.Port);
         editor.apply();
     }
 }

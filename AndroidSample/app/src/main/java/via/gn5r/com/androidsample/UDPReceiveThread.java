@@ -11,11 +11,20 @@ import java.net.SocketException;
 public class UDPReceiveThread extends Thread {
     private MainActivity mainActivity = null;
     private DatagramSocket socket = null;
+    private boolean trueConnect = false;
 
     public UDPReceiveThread(MainActivity mainActivity,int comPort) {
         this.mainActivity = mainActivity;
         try {
-            socket = new DatagramSocket(comPort);
+
+            if(socket != null){
+                socket.close();
+                socket = null;
+                socket = new DatagramSocket(comPort);
+            }else {
+                socket = new DatagramSocket(comPort);
+            }
+
         } catch (SocketException e) {
             e.printStackTrace();
         }
@@ -24,6 +33,11 @@ public class UDPReceiveThread extends Thread {
     @Override
     public synchronized void start() {
         super.start();
+        trueConnect = true;
+    }
+
+    public void onStop(){
+        trueConnect = false;
     }
 
     @Override
@@ -32,7 +46,7 @@ public class UDPReceiveThread extends Thread {
         DatagramPacket packet = new DatagramPacket(buf,buf.length);
 
         try{
-            while (true) {
+            while (trueConnect) {
                 socket.receive(packet);
                 String receive = new String(packet.getData(),0,packet.getLength());
                 mainActivity.viewText(receive);
@@ -40,10 +54,10 @@ public class UDPReceiveThread extends Thread {
         }catch (Exception e){
             e.printStackTrace();
         }
-        socket.close();
-        socket = null;
-        mainActivity = null;
-        packet = null;
-        buf = null;
+//        socket.close();
+//        socket = null;
+//        mainActivity = null;
+//        packet = null;
+//        buf = null;
     }
 }
