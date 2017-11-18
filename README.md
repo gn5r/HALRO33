@@ -4,7 +4,9 @@
 - 2017年11月11日(土) リポジトリ構成見直し、プロジェクト統一
 - 2017年11月13日(月) create magro branch & added cad directory
 - 2017年11月14日(火) AndroidとArduinoのサンプルを再編成 UDP実装
-- 2017年11月16日(木) AndroidSapmleにてUDP受信機能実装。IPAddressとPortの表示
+- 2017年11月16日(木) AndroidSapmleにてUDP受信機能実装。IPAddressとPortの表示<br>
+同日 UDP送受信可能に。また初回起動時にIPAddressとPortを保存可能に
+- 2017年11月17日(金) ESP-WROOMディレクトリ、README作成
 
 ブランチ名は各自で好きなように設定して構わないけど、３人がわかる範囲内でおねがい<br>
 基本的に僕のブランチ名は`gn5r`です<br>
@@ -98,10 +100,7 @@ gitコマンドについては全て`git 〜`のコマンドです
 
 ## UDPSample使い方
 
-`cd UDPSample/jarFiles`などを打ち込んでおいて、ディレクトリに移動しておく。<br>
-`java -jar udpSample.jar IPAddress port`を打ち込むとjarファイルを実行できる
-- IPAddress(送信先のIPAddress)
-- Port(UDP通信のPort設定)
+- [UDPSample使い方](./UDPSample/README.md)
 
 なお、Cmderの使い方として**矢印⇧**で履歴が使える<br>
 **TABキー** であらゆる候補がでる(長いブランチ名やディレクトリ名の時に一々手入力せずに済む)<br>
