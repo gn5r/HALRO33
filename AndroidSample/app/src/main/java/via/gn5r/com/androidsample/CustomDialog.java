@@ -29,7 +29,7 @@ public class CustomDialog extends DialogFragment {
         mainActivity = (MainActivity) getArguments().getSerializable("MainActivity");
 
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View content = inflater.inflate(R.layout.custom_dialog, null);
+        View content = inflater.inflate(R.layout.dialog_main, null);
 
         customDialog.setTitle("UDP通信設定");
         customDialog.setView(content);
