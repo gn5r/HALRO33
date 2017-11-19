@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         // バックキーの長押しに対する処理
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            showText("終了します");
             Process.killProcess(Process.myPid());
             return true;
         }

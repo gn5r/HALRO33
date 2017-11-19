@@ -44,6 +44,7 @@ public class CustomDialog extends DialogFragment {
 
         final ListView listView = (ListView) convertView.findViewById(R.id.custom_list);
         listView.setAdapter(adapter);
+        /*  Listタップ時に格納されているIP Address と comPortを使用  */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -51,14 +52,15 @@ public class CustomDialog extends DialogFragment {
                 String comPort = udpData.get(i).getComPort();
 
                 if (!TextUtils.isEmpty(IPAddress) && !TextUtils.isEmpty(comPort)) {
-                    new UDPReceiveThread(mainActivity,Integer.parseInt(comPort)).start();
-                    mainActivity.setUDPDatas(IPAddress,comPort);
+                    new UDPReceiveThread(mainActivity, Integer.parseInt(comPort)).start();
+                    mainActivity.setUDPDatas(IPAddress, comPort);
                     mainActivity.viewIPAddress();
                     dismiss();
                 }
             }
         });
 
+        /*  Listロングタッチ時にタッチした要素を削除  */
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -72,7 +74,12 @@ public class CustomDialog extends DialogFragment {
         });
 
         Button button = (Button) convertView.findViewById(R.id.new_data);
-        button.setOnClickListener(new onClick());
+        /*  Listの要素数が5個以下なら実行  */
+        if (udpData.size() <= 5) {
+            button.setOnClickListener(new onClick());
+        }else {
+            mainActivity.showText("これ以上データを追加出来ません");
+        }
 
         listDialog.setTitle("UDP通信先");
         if (udpData.size() == 0) {
@@ -117,8 +124,8 @@ public class CustomDialog extends DialogFragment {
                             }
                             mainActivity.showText(String.valueOf(udpData.size())
                                     + "個目を作成しました");
-                            new UDPReceiveThread(mainActivity,Integer.parseInt(comPort)).start();
-                            mainActivity.setUDPDatas(IPAddress,comPort);
+                            new UDPReceiveThread(mainActivity, Integer.parseInt(comPort)).start();
+                            mainActivity.setUDPDatas(IPAddress, comPort);
                             mainActivity.viewIPAddress();
                         } catch (NullPointerException e) {
                             e.printStackTrace();
