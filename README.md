@@ -28,7 +28,7 @@ Windows環境なら**Cmder(full version)** をダウンロードしておく。<
 `git --version` を打ち込み正しくgitが使えるかどうかを検証しておく。<br>
 
 コマンドプロンプトを管理者権限で実行<br>
-`cmder /REGISTER ALL`<br>
+`cmder /REGISTER ALL`これを入力するとコンテキストメニューからCmderを実行できる<br>
 `git config --global user.email "exsample@email.com"`<br>
 `git config --global user.name "github user name"`<br>
 `git config --global credential.helper store(Windows環境ならwincred)`<br>
