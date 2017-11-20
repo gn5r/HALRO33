@@ -1,6 +1,5 @@
 package via.gn5r.com.androidsample;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -9,7 +8,6 @@ import android.os.Handler;
 import android.os.Process;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -21,7 +19,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
     private Handler handler;
-    private String IPAddress,comPort;
+    private String IPAddress, comPort;
     private ArrayList<UDPData> list;
 
     @Override
@@ -72,8 +70,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         WifiInfo wifIinfo = wifiManager.getConnectionInfo();
         int address = wifIinfo.getIpAddress();
         String IPAddress = ((address >> 0) & 0xFF) + "."
-                + ((address >> 8) & 0xFF) + "." + ((address >> 16) & 0xFF)
-                + "." + ((address >> 24) & 0xFF);
+                + ((address >> 8) & 0xFF) + "."
+                + ((address >> 16) & 0xFF) + "."
+                + ((address >> 24) & 0xFF);
         TextView ipView = (TextView) findViewById(R.id.ip_address);
         ipView.setText("IPアドレス:" + IPAddress + "\nポート:" + comPort);
     }
@@ -161,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         editor.apply();
     }
 
-    public void setUDPDatas(String IPAddress,String comPort){
+    public void setUDPDatas(String IPAddress, String comPort) {
         this.IPAddress = IPAddress;
         this.comPort = comPort;
     }
