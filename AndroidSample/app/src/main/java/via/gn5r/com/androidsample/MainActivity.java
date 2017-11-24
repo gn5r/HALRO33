@@ -1,6 +1,5 @@
 package via.gn5r.com.androidsample;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -9,7 +8,6 @@ import android.os.Handler;
 import android.os.Process;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -17,11 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
     private Handler handler;
-    private String IPAddress, Port;
-    private UDPReceiveThread receiveThread;
+    private String IPAddress, comPort;
+    private ArrayList<UDPData> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,36 +29,26 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         handler = new Handler();
 
-//        SharedPreferences info = getSharedPreferences("Information", MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("UDPData", MODE_PRIVATE);
 
-//        setIPAddress(info.getString("IPAddress", null));
-//        setPort(info.getString("comPort", null));
-
-        if (!TextUtils.isEmpty(this.IPAddress) && !TextUtils.isEmpty(this.Port)) {
-
-            if (receiveThread != null) {
-                receiveThread.onStop();
-                receiveThread = null;
-            } else {
-                receiveThread = new UDPReceiveThread(this, Integer.parseInt(Port));
-                receiveThread.start();
-                viewIPAddress();
-            }
-
-        } else {
-            CustomDialog customDialog = new CustomDialog();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("MainActivity", MainActivity.this);
-            customDialog.setArguments(bundle);
-            customDialog.show(getFragmentManager(), "Settings");
-
+        list = new ArrayList<>();
+        for (int i = preferences.getInt("count", 0); i > 0; i--) {
+            UDPData udpData = new UDPData();
+            showText("要素数:" + String.valueOf(i));
+            udpData.setIPAddress(preferences.getString("IP" + String.valueOf(i), null));
+            udpData.setComPort(preferences.getString("Port" + String.valueOf(i), null));
+            list.add(udpData);
         }
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("MainActivity", this);
+        CustomDialog customDialog = new CustomDialog();
+        customDialog.setArguments(bundle);
+        customDialog.show(getFragmentManager(), "List");
     }
 
     @Override
     protected void onDestroy() {
-        receiveThread.onStop();
-
         super.onDestroy();
     }
 
@@ -68,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         // バックキーの長押しに対する処理
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            showText("終了します");
             Process.killProcess(Process.myPid());
             return true;
         }
@@ -82,17 +70,18 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         WifiInfo wifIinfo = wifiManager.getConnectionInfo();
         int address = wifIinfo.getIpAddress();
         String IPAddress = ((address >> 0) & 0xFF) + "."
-                + ((address >> 8) & 0xFF) + "." + ((address >> 16) & 0xFF)
-                + "." + ((address >> 24) & 0xFF);
+                + ((address >> 8) & 0xFF) + "."
+                + ((address >> 16) & 0xFF) + "."
+                + ((address >> 24) & 0xFF);
         TextView ipView = (TextView) findViewById(R.id.ip_address);
-        ipView.setText("IPアドレス:" + IPAddress + "\nポート:" + Port);
+        ipView.setText("IPアドレス:" + IPAddress + "\nポート:" + comPort);
     }
 
     public void sendMessage(View view) {
         EditText editText = (EditText) findViewById(R.id.editMessage);
         String message = editText.getText().toString();
         try {
-            new UDPSendTask(MainActivity.this, IPAddress, Integer.parseInt(Port)).execute(message);
+            new UDPSendTask(MainActivity.this, IPAddress, Integer.parseInt(comPort)).execute(message);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -144,19 +133,35 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         });
     }
 
-    public void setIPAddress(String IPAddress) {
-        this.IPAddress = IPAddress;
+    public ArrayList<UDPData> getList() {
+        return list;
     }
 
-    public void setPort(String port) {
-        this.Port = port;
-    }
 
-    public void saveInformation(String IPAddress, String comPort) {
-        SharedPreferences preferences = getSharedPreferences("Information", MODE_PRIVATE);
+    public void setPref(ArrayList<UDPData> udpData, int count) {
+        SharedPreferences preferences = getSharedPreferences("UDPData", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("IPAddress", this.IPAddress);
-        editor.putString("comPort", this.Port);
+
+        for (UDPData data : udpData) {
+            editor.putString("IP" + String.valueOf(count), data.getIPAddress());
+            editor.putString("Port" + String.valueOf(count), data.getComPort());
+            editor.putInt("count", udpData.size());
+            editor.apply();
+        }
+    }
+
+    public void deletePref(ArrayList<UDPData> udpData, int position) {
+        SharedPreferences preferences = getSharedPreferences("UDPData", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.remove("IP" + String.valueOf(position));
+        editor.remove("Port" + String.valueOf(position));
+        editor.putInt("count", udpData.size());
         editor.apply();
+    }
+
+    public void setUDPDatas(String IPAddress, String comPort) {
+        this.IPAddress = IPAddress;
+        this.comPort = comPort;
     }
 }

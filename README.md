@@ -7,6 +7,8 @@
 - 2017年11月16日(木) AndroidSapmleにてUDP受信機能実装。IPAddressとPortの表示<br>
 同日 UDP送受信可能に。また初回起動時にIPAddressとPortを保存可能に
 - 2017年11月17日(金) ESP-WROOMディレクトリ、README作成
+- 2017年11月20日(月) リストダイアログ実装。接続先を複数個へ(5つまで登録可能)
+- 2017年11月24日(金) 下部EditText類を別ファイルに分割
 
 ブランチ名は各自で好きなように設定して構わないけど、３人がわかる範囲内でおねがい<br>
 基本的に僕のブランチ名は`gn5r`です<br>
@@ -27,7 +29,7 @@ Windows環境なら**Cmder(full version)** をダウンロードしておく。<
 `git --version` を打ち込み正しくgitが使えるかどうかを検証しておく。<br>
 
 コマンドプロンプトを管理者権限で実行<br>
-`cmder /REGISTER ALL`<br>
+`cmder /REGISTER ALL`これを入力するとコンテキストメニューからCmderを実行できる<br>
 `git config --global user.email "exsample@email.com"`<br>
 `git config --global user.name "github user name"`<br>
 `git config --global credential.helper store(Windows環境ならwincred)`<br>
