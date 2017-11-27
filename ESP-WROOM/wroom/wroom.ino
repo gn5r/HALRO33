@@ -1,22 +1,23 @@
 #include <ESP8266WiFi.h>
-
 #include <WiFiUdp.h>
 
-
-const char *APSSID = "WROOM_001";
-const char *APPASS = "123abc";
-unsigned int localPort = 5555;
+const char *APSSID = "wroom001";
+const char *APPASS = "r01vy.net";
+unsigned int localPort = 8888;
 
 WiFiUDP UDP;
 char packetBuffer[255];
 
-static const char *udpReturnAddr = "";
-static const int udpReturnPort = 5555;
+static const char *udpReturnAddr = "192.168.4.2";
+static const int udpReturnPort = 1234;
 
 void setup() {
     Serial.begin(115200);
     Serial.println();
- 
+
+    delay(1000);
+    Serial.println("start WiFi");
+    
     WiFi.softAP(APSSID, APPASS);
  
     IPAddress myIP = WiFi.softAPIP();
@@ -27,7 +28,9 @@ void setup() {
 
 void loop()
 {
+  Serial.println("start connect");
   UDP.beginPacket(udpReturnAddr, udpReturnPort);
   UDP.write("Hello World");
   UDP.endPacket();
+  delay(2000);
 }
