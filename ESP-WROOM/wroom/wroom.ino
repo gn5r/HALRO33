@@ -29,9 +29,8 @@ void setup() {
 void loop()
 {
   int i = Serial.read();
+  Serial.println(i);
   
-  String x = String(x,HEX);
-  Serial.println(x);
   Serial.println("start connect");
   UDP.beginPacket(udpReturnAddr, udpReturnPort);
   UDP.write("Hello World");
