@@ -17,7 +17,7 @@ public class UDPSend {
 	
 	public boolean send() throws Exception {
 		BufferedReader br = new BufferedReader( new InputStreamReader(System.in) );
-		System.out.println("Type send message:");
+		System.out.print("Type send message:");
 		String message = br.readLine();
 		byte[] buf = message.getBytes("UTF-8");
 
