@@ -38,7 +38,7 @@ Windows環境なら**Cmder(full version)** をダウンロードしておく。<
 
 初期設定が完了したらGitリポジトリ(ディレクトリ)をダウンロードするフォルダを予め作成しておく<br>
 一例ではLinux環境なので適宜読み替えてください。<br>
-`/home/gn5r/←カレントディレクトリ $ mkdir Test`<br>
+`/home/gn5r/←(初期)カレントディレクトリ $ mkdir Test`<br>
 カレントディレクトリを作成したフォルダへ移動<br>
 `cd Test/`<br>
 Gitを使うため初期化<br>
