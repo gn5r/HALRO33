@@ -28,9 +28,12 @@ void setup() {
 
 void loop()
 {
+  int i = Serial.read();
+  Serial.println(i);
+  
   Serial.println("start connect");
   UDP.beginPacket(udpReturnAddr, udpReturnPort);
   UDP.write("Hello World");
   UDP.endPacket();
-  delay(2000);
+  delay(3000);
 }
