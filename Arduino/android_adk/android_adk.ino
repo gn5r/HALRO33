@@ -25,5 +25,5 @@ void loop() {
     acc.write(&text,sizeof(text));
   } else {
   }
-  delay(10);
+  delay(1000);
 }
