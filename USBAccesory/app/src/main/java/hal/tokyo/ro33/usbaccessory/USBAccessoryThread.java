@@ -26,13 +26,15 @@ public class USBAccessoryThread extends Thread {
 
         try{
             InputStreamReader reader = new InputStreamReader(inputStream);
-            StringBuilder builder = new StringBuilder();
-            char[] buf = new char[256];
-            int read;
-            while (0 <= (read = reader.read(buf))){
-                builder.append(buf,0,read);
-            }
-            mainActivity.showText(builder.toString());
+//            StringBuilder builder = new StringBuilder();
+//            char[] buf = new char[256];
+//            int read;
+//            while (0 <= (read = reader.read(buf))){
+//                builder.append(buf,0,read);
+//            }
+            byte[] buf = new byte[256];
+            int length = inputStream.read(buf);
+            mainActivity.showText(new String(buf,0,length,"UTF-8"));
         }catch (IOException e){
             e.printStackTrace();
         }

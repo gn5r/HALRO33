@@ -1,4 +1,4 @@
-package via.gn5r.com.androidsample;
+package shangyuan.tuolang.slot.udp;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,6 +16,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+
+import shangyuan.tuolang.slot.*;
 
 /**
  * Created by shangyuan.tuolang on 2017/11/18.
@@ -51,10 +53,7 @@ public class CustomDialog extends DialogFragment {
                 String IPAddress = udpData.get(i).getIPAddress();
                 String comPort = udpData.get(i).getComPort();
 
-                if (!TextUtils.isEmpty(IPAddress)) {
-                    if(TextUtils.isEmpty(comPort)){
-                        comPort = "5555";
-                    }
+                if (!TextUtils.isEmpty(IPAddress) && !TextUtils.isEmpty(comPort)) {
                     new UDPReceiveThread(mainActivity, Integer.parseInt(comPort)).start();
                     mainActivity.setUDPDatas(IPAddress, comPort);
                     mainActivity.viewIPAddress();
@@ -80,12 +79,14 @@ public class CustomDialog extends DialogFragment {
         /*  Listの要素数が5個以下なら実行  */
         if (udpData.size() <= 5) {
             button.setOnClickListener(new onClick());
-        } else {
-            mainActivity.showText("これ以上データを追加出来ません");
+        }else {
+
         }
 
         listDialog.setTitle("UDP通信先");
-        listDialog.setMessage("IPAddress:" + mainActivity.getMyIPAddress());
+        if (udpData.size() == 0) {
+            listDialog.setMessage("データがありません");
+        }
         listDialog.setView(convertView);
 
         return listDialog.create();
@@ -123,10 +124,9 @@ public class CustomDialog extends DialogFragment {
                                 udpData.add(data);
                                 mainActivity.setPref(udpData, udpData.size());
                             }
-                            mainActivity.showText(String.valueOf(udpData.size())
-                                    + "個目を作成しました");
                             new UDPReceiveThread(mainActivity, Integer.parseInt(comPort)).start();
                             mainActivity.setUDPDatas(IPAddress, comPort);
+                            mainActivity.viewIPAddress();
                         } catch (NullPointerException e) {
                             e.printStackTrace();
                         }

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
     private Handler handler;
-    private String IPAddress, comPort;
+    private String IPAddress, comPort,myIPAddress;
     private ArrayList<UDPData> list;
 
     @Override
@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             udpData.setComPort(preferences.getString("Port" + String.valueOf(i), null));
             list.add(udpData);
         }
+
+        viewIPAddress();
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("MainActivity", this);
@@ -69,12 +71,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         WifiInfo wifIinfo = wifiManager.getConnectionInfo();
         int address = wifIinfo.getIpAddress();
-        String IPAddress = ((address >> 0) & 0xFF) + "."
+        myIPAddress = ((address >> 0) & 0xFF) + "."
                 + ((address >> 8) & 0xFF) + "."
                 + ((address >> 16) & 0xFF) + "."
                 + ((address >> 24) & 0xFF);
-        TextView ipView = (TextView) findViewById(R.id.ip_address);
-        ipView.setText("IPアドレス:" + IPAddress + "\nポート:" + comPort);
     }
 
     public void sendMessage(View view) {
@@ -103,8 +103,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                TextView textView = (TextView) findViewById(R.id.textView);
-                textView.setText(text);
 
                 if (!TextUtils.isEmpty(text)) {
                     switch (text) {
@@ -163,5 +161,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     public void setUDPDatas(String IPAddress, String comPort) {
         this.IPAddress = IPAddress;
         this.comPort = comPort;
+    }
+
+    public String getMyIPAddress() {
+        return myIPAddress;
     }
 }

@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             outputStream = new FileOutputStream(fileDescriptor);
             Thread thread = new USBAccessoryThread(outputStream,inputStream,MainActivity.this);
             thread.start();
+            Toast.makeText(MainActivity.this,"Threadスタート！",Toast.LENGTH_SHORT).show();
         }
     }
 
