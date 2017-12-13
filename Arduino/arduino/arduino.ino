@@ -1,4 +1,3 @@
-c
 #include <SoftwareSerial.h>
 
 SoftwareSerial mySerial(15, 14); // RX, TX
