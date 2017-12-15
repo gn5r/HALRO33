@@ -6,11 +6,12 @@ import java.net.InetAddress;
 
 public class UDPSend {
 	private DatagramSocket socket = new DatagramSocket();
-	InetAddress inetAddress;
+	private InetAddress inetAddress;
 	private int port;
 
-	public UDPSend(int comPort) throws Exception {
+	public UDPSend(int comPort, InetAddress inetAddress) throws Exception {
 		this.port = comPort;
+		this.inetAddress = inetAddress;
 	}
 
 	public void send(String message) throws Exception {
@@ -23,5 +24,4 @@ public class UDPSend {
 	public void close() {
 		this.socket.close();
 	}
-
 }
