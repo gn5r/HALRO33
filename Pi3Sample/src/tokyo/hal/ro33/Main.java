@@ -16,13 +16,13 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		System.out.println("Starting Pi4j\nSettings UDP comPort:5555");
-		udpGet = new UDPGet(5555);
-		udpGet.start();
-
-		if (udpGet.recieve().equals("connect")) {
-			udpSend = new UDPSend(5555, udpGet.getAddress());
-			udpSend.send("connected!");
-		}
+		// udpGet = new UDPGet(5555);
+		// udpGet.start();
+		//
+		// if (udpGet.recieve().equals("connect")) {
+		// udpSend = new UDPSend(5555, udpGet.getAddress());
+		// udpSend.send("connected!");
+		// }
 
 		final GpioController gpio = GpioFactory.getInstance();
 
@@ -31,21 +31,21 @@ public class Main {
 
 		gpio00.setShutdownOptions(true);
 		gpio02.setShutdownOptions(true, PinState.LOW);
-		
+
 		gpio02.high();
-		
+
 		gpio00.addListener(new GpioPinListenerDigital() {
 
 			@Override
 			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent arg0) {
 				System.out.println("GPIO Status :  " + arg0.getPin() + " = " + arg0.getState());
 				gpio02.toggle();
-				
-				try {
-					udpSend.send(arg0.getState().toString());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+
+				// try {
+				// udpSend.send(arg0.getState().toString());
+				// } catch (Exception e) {
+				// e.printStackTrace();
+				// }
 			}
 		});
 
