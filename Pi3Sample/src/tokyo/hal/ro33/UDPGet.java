@@ -8,9 +8,11 @@ import java.net.SocketException;
 public class UDPGet extends Thread {
 	private DatagramSocket socket;
 	private DatagramPacket packet;
+	private Main main;
 
 	public UDPGet(int comPort) throws Exception, SocketException {
 		this.socket = new DatagramSocket(comPort);
+		this.main = new Main();
 	}
 
 	@Override
@@ -18,8 +20,12 @@ public class UDPGet extends Thread {
 		try {
 			byte[] buf = new byte[1024];
 			this.packet = new DatagramPacket(buf, buf.length);
-			socket.receive(this.packet);
-//			System.out.println(new String(packet.getData(), 0, packet.getLength()));
+			while (true) {
+				socket.receive(this.packet);
+				String receive = new String(packet.getData(), 0, packet.getLength());
+				main.Receive(receive);
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -28,8 +34,8 @@ public class UDPGet extends Thread {
 	public String getPacket() {
 		return new String(packet.getData(), 0, packet.getLength());
 	}
-	
+
 	public String getConnectIP() {
-		return packet.getAddress().toString();
+		return packet.getAddress().toString().replaceFirst(".*" + "/", "");
 	}
 }

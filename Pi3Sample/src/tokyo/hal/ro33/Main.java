@@ -14,15 +14,13 @@ public class Main {
 	private static UDPGet udpGet;
 	private static UDPSend udpSend;
 	private static String receive;
+	private static int comPort;
 
 	public static void main(String[] args) throws Exception {
-		System.out.println("Starting Pi4j\n" + "connectIP:" + args[0] + " comPort:" + args[1]);
-		udpGet = new UDPGet(Integer.parseInt(args[1]));
+		System.out.println("Starting Pi4j\n" + " comPort:" + args[0]);
+		comPort = Integer.parseInt(args[0]);
+		udpGet = new UDPGet(comPort);
 		udpGet.start();
-		
-		udpSend = new UDPSend(Integer.parseInt(args[1]), udpGet.getConnectIP());
-
-		System.out.println("送信元:" + udpGet.getConnectIP());
 
 		final GpioController gpio = GpioFactory.getInstance();
 
@@ -54,6 +52,22 @@ public class Main {
 
 		// gpio.shutdown();
 
+	}
+
+	public void Receive(String text) throws Exception {
+		if (!text.isEmpty()) {
+			switch (text) {
+			case "connect":
+				System.out.println("送信元:" + udpGet.getConnectIP());
+				udpSend = new UDPSend(comPort, udpGet.getConnectIP());
+				udpSend.send("connecting start!");
+				break;
+
+			default:
+				System.out.println("受信:" + text);
+				break;
+			}
+		}
 	}
 
 }
