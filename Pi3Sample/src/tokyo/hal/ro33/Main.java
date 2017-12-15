@@ -13,17 +13,11 @@ import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 public class Main {
 	private static UDPGet udpGet;
 	private static UDPSend udpSend;
+	private static String receive;
 
 	public static void main(String[] args) throws Exception {
-		System.out.println("Starting Pi4j\nSettings UDP comPort:5555");
-		// udpGet = new UDPGet(5555);
-		// udpGet.start();
-		//
-		// if (udpGet.recieve().equals("connect")) {
-		// udpSend = new UDPSend(5555, udpGet.getAddress());
-		// udpSend.send("connected!");
-		// }
-
+		System.out.println("Starting Pi4j\n" + "connectIP:" + args[0] + "comPort:" + args[1]);
+		udpSend = new UDPSend(Integer.parseInt(args[1]), args[0]);
 		final GpioController gpio = GpioFactory.getInstance();
 
 		final GpioPinDigitalInput gpio00 = gpio.provisionDigitalInputPin(RaspiPin.GPIO_00, PinPullResistance.PULL_UP);
@@ -40,12 +34,11 @@ public class Main {
 			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent arg0) {
 				System.out.println("GPIO Status :  " + arg0.getPin() + " = " + arg0.getState());
 				gpio02.toggle();
-
-				// try {
-				// udpSend.send(arg0.getState().toString());
-				// } catch (Exception e) {
-				// e.printStackTrace();
-				// }
+				try {
+					udpSend.send(arg0.getState().toString());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 

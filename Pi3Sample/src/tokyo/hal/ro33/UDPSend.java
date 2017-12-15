@@ -9,9 +9,9 @@ public class UDPSend {
 	private InetAddress inetAddress;
 	private int port;
 
-	public UDPSend(int comPort, InetAddress inetAddress) throws Exception {
+	public UDPSend(int comPort, String connetIP) throws Exception {
 		this.port = comPort;
-		this.inetAddress = inetAddress;
+		this.inetAddress = InetAddress.getByName(connetIP);
 	}
 
 	public void send(String message) throws Exception {
