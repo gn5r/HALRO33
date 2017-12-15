@@ -31,12 +31,16 @@ public class Main {
 
 		gpio00.setShutdownOptions(true);
 		gpio02.setShutdownOptions(true, PinState.LOW);
-
+		
+		gpio02.high();
+		
 		gpio00.addListener(new GpioPinListenerDigital() {
 
 			@Override
 			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent arg0) {
 				System.out.println("GPIO Status :  " + arg0.getPin() + " = " + arg0.getState());
+				gpio02.toggle();
+				
 				try {
 					udpSend.send(arg0.getState().toString());
 				} catch (Exception e) {
