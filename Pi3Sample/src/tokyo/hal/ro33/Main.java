@@ -31,7 +31,11 @@ public class Main {
 			}
 		});
 
-		gpio.shutdown();
+		while (true) {
+			Thread.sleep(500);
+		}
+
+		// gpio.shutdown();
 
 	}
 
