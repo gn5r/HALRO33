@@ -14,7 +14,8 @@ public class Main {
 	private static UDPGet udpGet;
 	private static UDPSend udpSend;
 	private static int comPort;
-
+	private static GpioPinDigitalOutput leftButtonLED;
+	
 	public static void main(String[] args) throws Exception {
 		System.out.println("Starting Pi4j\n" + " comPort:" + args[0]);
 		comPort = Integer.parseInt(args[0]);
@@ -23,20 +24,20 @@ public class Main {
 
 		final GpioController gpio = GpioFactory.getInstance();
 
-		final GpioPinDigitalInput gpio00 = gpio.provisionDigitalInputPin(RaspiPin.GPIO_00, PinPullResistance.PULL_UP);
-		final GpioPinDigitalOutput gpio02 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "LED", PinState.HIGH);
+		final GpioPinDigitalInput leftButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_00, PinPullResistance.PULL_UP);
+		leftButtonLED = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "LED", PinState.HIGH);
 
-		gpio00.setShutdownOptions(true);
-		gpio02.setShutdownOptions(true, PinState.LOW);
+		leftButton.setShutdownOptions(true);
+		leftButtonLED.setShutdownOptions(true, PinState.LOW);
 
-		gpio02.high();
+		leftButtonLED.high();
 
-		gpio00.addListener(new GpioPinListenerDigital() {
+		leftButton.addListener(new GpioPinListenerDigital() {
 
 			@Override
 			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent arg0) {
 				System.out.println("GPIO Status :  " + arg0.getPin() + " = " + arg0.getState());
-				gpio02.toggle();
+				leftButtonLED.toggle();
 				if (arg0.getState().equals(PinState.HIGH)) {
 					try {
 						udpSend.send("lever");
@@ -63,9 +64,14 @@ public class Main {
 				udpSend = new UDPSend(comPort, udpGet.getConnectIP());
 				udpSend.send("connecting start!");
 				break;
+				
+				case "replay":
+					leftButtonLED.toggle();
+					break;
 
 			default:
 				System.out.println("受信:" + text);
+				leftButtonLED.toggle();
 				break;
 			}
 		}
