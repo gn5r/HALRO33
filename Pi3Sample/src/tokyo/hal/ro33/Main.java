@@ -38,7 +38,7 @@ public class Main {
 			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent arg0) {
 				System.out.println("GPIO Status :  " + arg0.getPin() + " = " + arg0.getState());
 				leftButtonLED.toggle();
-				if (arg0.getState().equals(PinState.HIGH)) {
+				if (leftButtonLED.getState().equals(PinState.HIGH)) {
 					try {
 						udpSend.send("lever");
 					} catch (Exception e) {
