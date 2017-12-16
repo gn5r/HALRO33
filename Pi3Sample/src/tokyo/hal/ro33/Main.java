@@ -39,7 +39,7 @@ public class Main {
 				gpio02.toggle();
 				if (arg0.getState().equals(PinState.HIGH)) {
 					try {
-						udpSend.send(arg0.getState().toString());
+						udpSend.send("lever");
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
