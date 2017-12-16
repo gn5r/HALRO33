@@ -2,7 +2,6 @@ package tokyo.hal.ro33;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.SocketException;
 
 public class UDPGet extends Thread {
