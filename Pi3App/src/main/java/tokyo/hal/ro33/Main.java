@@ -30,11 +30,18 @@ public class Main {
         leftButton.setShutdownOptions(true);
         leftButtonLED.setShutdownOptions(true, PinState.LOW);
 
-        System.out.println("Start UDP Settings...");
-        comPort = Integer.parseInt(args[0]);
+        System.out.println("OK\nStart UDP Settings...");
+        
+        /*  jar実行時に引数がなければcomPortを5555にする  */
+        if (args.length < 1) {
+            comPort = 5555;
+        } else {
+            comPort = Integer.parseInt(args[0]);
+        }
+        
         udpReceive = new UDPReceive(comPort);
         udpReceive.start();
-
+        System.out.println("OK\nUDPPort:" + String.valueOf(comPort));
         leftButtonLED.high();
 
         while (true) {
