@@ -15,8 +15,8 @@ import com.pi4j.io.gpio.event.GpioPinListenerDigital;
  */
 public class ButtonClickListener implements GpioPinListenerDigital {
 
-    private GpioPinDigitalOutput ButtonLED;
-    private UDPSend udpSend;
+    private final GpioPinDigitalOutput ButtonLED;
+    private final UDPSend udpSend;
 
     public ButtonClickListener(GpioPinDigitalOutput leftButtonLED, UDPSend udpSend) {
         this.ButtonLED = leftButtonLED;
@@ -28,9 +28,9 @@ public class ButtonClickListener implements GpioPinListenerDigital {
         System.out.println("GPIO Status:" + arg0.getPin() + " = " + arg0.getState());
         ButtonLED.toggle();
         try {
-            udpSend.Send(arg0.getPin() + "=" + arg0.getState().toString());
+            udpSend.Send(arg0.getPin().toString().replaceAll("<.+?>" ,"") + "= " + arg0.getState().toString());
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
+    
 }
