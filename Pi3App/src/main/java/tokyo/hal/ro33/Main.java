@@ -13,8 +13,8 @@ import com.pi4j.io.gpio.*;
  */
 public class Main {
 
-    private static GpioPinDigitalInput leftButton;
-    private static GpioPinDigitalOutput leftButtonLED;
+    private static GpioPinDigitalInput leftButton,centerButton,rightButton;
+    private static GpioPinDigitalOutput leftButtonLED,centerButtonLED,rightButtonLED;
     private static UDPReceive udpReceive;
     private static UDPSend udpSend;
     private static int comPort;
@@ -24,11 +24,21 @@ public class Main {
 
         final GpioController gpio = GpioFactory.getInstance();
 
-        leftButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_00, PinPullResistance.PULL_UP);
-        leftButtonLED = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "LED", PinState.HIGH);
+        leftButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_15, PinPullResistance.PULL_UP);
+        leftButtonLED = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_16, "LED", PinState.HIGH);
+        
+        centerButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_00, PinPullResistance.PULL_UP);
+        centerButtonLED = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "cLED", PinState.HIGH);
 
+        rightButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_04, PinPullResistance.PULL_UP);
+        rightButtonLED = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_05, "rLED", PinState.HIGH);
+        
         leftButton.setShutdownOptions(true);
         leftButtonLED.setShutdownOptions(true, PinState.LOW);
+        centerButton.setShutdownOptions(true);
+        centerButtonLED.setShutdownOptions(true, PinState.LOW);
+        rightButton.setShutdownOptions(true);
+        rightButtonLED.setShutdownOptions(true, PinState.LOW);
 
         System.out.println("OK\nStart UDP Settings...");
         
@@ -43,7 +53,9 @@ public class Main {
         udpReceive.start();
         System.out.println("OK\nUDPPort:" + String.valueOf(comPort));
         leftButtonLED.high();
-
+        centerButtonLED.high();
+        rightButtonLED.high();
+        
         while (true) {
             Thread.sleep(500);
         }
@@ -56,7 +68,10 @@ public class Main {
                     System.out.println("送信元:" + udpReceive.getConnectIP());
                     udpSend = new UDPSend(udpReceive.getConnectIP(), comPort);
                     udpSend.Send("Success Connect!");
+                    
                     leftButton.addListener(new ButtonClickListener(leftButtonLED, udpSend));
+                    centerButton.addListener(new ButtonClickListener(centerButtonLED, udpSend));
+                    rightButton.addListener(new ButtonClickListener(rightButtonLED, udpSend));
                     break;
 
                 default:
