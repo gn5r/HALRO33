@@ -13,6 +13,11 @@
 - 2017年12月11日(月) Arduinoを辞めRaspberry Pi3を使うことに
 - 2017年12月17日(日) Pi3Application再編成。ラズパイ→デバイスとのUDP通信も確認
 
+## GPIO早見表
+<div align="center">
+<img src="./img/Pi3GPIO.png" alt="GPIO">
+</div>
+
 ブランチ名は各自で好きなように設定して構わないけど、３人がわかる範囲内でおねがい<br>
 基本的に僕のブランチ名は`gn5r`です<br>
 また、パソコンを使い分ける時があるので`shangyuan.tuolang`を使う時もあります。<br>
