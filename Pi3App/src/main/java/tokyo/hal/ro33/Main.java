@@ -13,8 +13,8 @@ import com.pi4j.io.gpio.*;
  */
 public class Main {
 
-    private static GpioPinDigitalInput leftButton,centerButton,rightButton;
-    private static GpioPinDigitalOutput leftButtonLED,centerButtonLED,rightButtonLED;
+    private static GpioPinDigitalInput leftButton, centerButton, rightButton;
+    private static GpioPinDigitalOutput leftButtonLED, centerButtonLED, rightButtonLED;
     private static UDPReceive udpReceive;
     private static UDPSend udpSend;
     private static int comPort;
@@ -26,13 +26,13 @@ public class Main {
 
         leftButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_15, PinPullResistance.PULL_UP);
         leftButtonLED = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_16, "LED", PinState.HIGH);
-        
+
         centerButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_00, PinPullResistance.PULL_UP);
         centerButtonLED = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "cLED", PinState.HIGH);
 
         rightButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_04, PinPullResistance.PULL_UP);
         rightButtonLED = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_05, "rLED", PinState.HIGH);
-        
+
         leftButton.setShutdownOptions(true);
         leftButtonLED.setShutdownOptions(true, PinState.LOW);
         centerButton.setShutdownOptions(true);
@@ -41,21 +41,21 @@ public class Main {
         rightButtonLED.setShutdownOptions(true, PinState.LOW);
 
         System.out.println("OK\nStart UDP Settings...");
-        
+
         /*  jar実行時に引数がなければcomPortを5555にする  */
         if (args.length < 1) {
             comPort = 5555;
         } else {
             comPort = Integer.parseInt(args[0]);
         }
-        
+
         udpReceive = new UDPReceive(comPort);
         udpReceive.start();
-        System.out.println("OK\nUDPPort:" + String.valueOf(comPort));
+        System.out.println("OK\nUDPPort:" + String.valueOf(comPort)+"\nwaiting connecting devices...");
         leftButtonLED.high();
         centerButtonLED.high();
         rightButtonLED.high();
-        
+
         while (true) {
             Thread.sleep(500);
         }
@@ -65,10 +65,10 @@ public class Main {
         if (!text.isEmpty()) {
             switch (text) {
                 case "connect":
-                    System.out.println("送信元:" + udpReceive.getConnectIP());
+                    System.out.println("OK\n送信元:" + udpReceive.getConnectIP());
                     udpSend = new UDPSend(udpReceive.getConnectIP(), comPort);
-                    udpSend.Send("Success Connect!");
-                    
+                    udpSend.Send("You IP Address:" + udpReceive.getConnectIP());
+
                     leftButton.addListener(new ButtonClickListener(leftButtonLED, udpSend));
                     centerButton.addListener(new ButtonClickListener(centerButtonLED, udpSend));
                     rightButton.addListener(new ButtonClickListener(rightButtonLED, udpSend));
