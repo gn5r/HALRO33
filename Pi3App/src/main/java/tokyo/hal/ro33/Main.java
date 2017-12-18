@@ -13,7 +13,7 @@ import com.pi4j.io.gpio.*;
  */
 public class Main {
 
-    private static GpioPinDigitalInput leftButton, centerButton, rightButton;
+    private static GpioPinDigitalInput leftButton, centerButton, rightButton, lever;
     private static GpioPinDigitalOutput leftButtonLED, centerButtonLED, rightButtonLED;
     private static UDPReceive udpReceive;
     private static UDPSend udpSend;
@@ -33,6 +33,8 @@ public class Main {
         rightButton = gpio.provisionDigitalInputPin(RaspiPin.GPIO_04, PinPullResistance.PULL_UP);
         rightButtonLED = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_05, "rLED", PinState.HIGH);
 
+        lever = gpio.provisionDigitalInputPin(RaspiPin.GPIO_06, PinPullResistance.PULL_UP);
+        
         leftButton.setShutdownOptions(true);
         leftButtonLED.setShutdownOptions(true, PinState.LOW);
         centerButton.setShutdownOptions(true);
@@ -51,7 +53,7 @@ public class Main {
 
         udpReceive = new UDPReceive(comPort);
         udpReceive.start();
-        System.out.println("OK\nUDPPort:" + String.valueOf(comPort)+"\nwaiting connecting devices...");
+        System.out.println("OK\nUDPPort:" + String.valueOf(comPort) + "\nwaiting connecting devices...");
         leftButtonLED.high();
         centerButtonLED.high();
         rightButtonLED.high();
@@ -72,6 +74,7 @@ public class Main {
                     leftButton.addListener(new ButtonClickListener(leftButtonLED, udpSend));
                     centerButton.addListener(new ButtonClickListener(centerButtonLED, udpSend));
                     rightButton.addListener(new ButtonClickListener(rightButtonLED, udpSend));
+                    lever.addListener(new  LeverListtener(udpSend));
                     break;
 
                 default:
