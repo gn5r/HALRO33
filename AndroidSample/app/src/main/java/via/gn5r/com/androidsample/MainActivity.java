@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
     private Handler handler;
-    private String IPAddress, comPort,myIPAddress;
+    private String IPAddress, comPort, myIPAddress;
     private ArrayList<UDPData> list;
 
     @Override
@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 + ((address >> 8) & 0xFF) + "."
                 + ((address >> 16) & 0xFF) + "."
                 + ((address >> 24) & 0xFF);
+        ((TextView) findViewById(R.id.myIP)).setText("IPAddress:" + myIPAddress);
     }
 
     public void sendMessage(View view) {
@@ -105,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             public void run() {
 
                 if (!TextUtils.isEmpty(text)) {
+                    ((TextView)findViewById(R.id.message)).setText(text);
+
                     switch (text) {
                         case "maxbet":
                             showText("レバーに気合を入れろ！");
