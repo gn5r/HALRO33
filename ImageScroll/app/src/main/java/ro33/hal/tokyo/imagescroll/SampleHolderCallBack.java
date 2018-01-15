@@ -1,32 +1,24 @@
 package ro33.hal.tokyo.imagescroll;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.SurfaceHolder;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by shelleden on 2017/12/18.
  */
 
-public class SampleHolderCallBack implements SurfaceHolder.Callback,Runnable {
+public class SampleHolderCallBack implements SurfaceHolder.Callback, Runnable {
 
     private SurfaceHolder holder = null;
     private Thread thread = null;
     private boolean isAttached = true;
-    Resources res;
+    private Resources res;
 
-    public SampleHolderCallBack(Resources res){
+    public SampleHolderCallBack(Resources res) {
         this.res = res;
     }
 
@@ -59,28 +51,28 @@ public class SampleHolderCallBack implements SurfaceHolder.Callback,Runnable {
         while (isAttached) {
 
             Canvas canvas = holder.lockCanvas();
+
             // ResourceからBitmapを生成
-            Bitmap bitmap = BitmapFactory.decodeResource(res,R.drawable.all);
+            Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.all);
 
             int w = bitmap.getWidth();
             int h = bitmap.getHeight();
 
-            if(hh < 0){
-                hh=1398;
+            if (hh <= 0) {
+                hh = 1398;
             }
             // 描画元の矩形イメージ
-            Rect src = new Rect(0,hh-h/21*3, w, h*3/21);
+            Rect src = new Rect(0, hh - h * 3 / 21, w, hh);
             // 描画先の矩形イメージ
-            Rect dst = new Rect(0, 0, w, h*3/21);
-            hh-=24;
+            Rect dst = new Rect(0, 0, w, h * 3 / 21);
+
+            Rect centerSrc = new Rect(0, hh - h * 6 / 21, w, hh - h * 3 / 21);
+            Rect centerDst = new Rect(256, 0, w + 256, h * 3 / 21);
+            hh -= 32;
 
             // 描画処理
-            canvas.drawBitmap(bitmap, src, dst, null);
+            canvas.drawBitmap(bitmap, centerSrc, centerDst, null);
             holder.unlockCanvasAndPost(canvas);
-//            try {
-//                TimeUnit.MICROSECONDS.sleep(500);
-//            }catch(InterruptedException e){
-//            }
         }
     }
 }
