@@ -14,12 +14,24 @@ import android.view.SurfaceView;
 public class ScrollSurfaceView extends SurfaceView {
     private SampleHolderCallBack cb;
 
+    boolean isAttached = true;
+
     public ScrollSurfaceView(Context context) {
         super(context);
         Resources res = this.getContext().getResources();
         SurfaceHolder holder = getHolder();
         cb = new SampleHolderCallBack(res);
         holder.addCallback(cb);
+    }
+
+    public void stopLeft(){
+        if(isAttached == true){
+            cb.setIsAttached(false);
+            isAttached = false;
+        }else if(isAttached == false){
+            cb.setIsAttached(true);
+            isAttached = true;
+        }
     }
 
 }

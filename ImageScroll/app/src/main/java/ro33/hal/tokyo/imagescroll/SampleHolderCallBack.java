@@ -24,9 +24,9 @@ public class SampleHolderCallBack implements SurfaceHolder.Callback, Runnable {
     private SurfaceHolder holder = null;
     private Thread thread = null;
     private boolean isAttached = true;
+    private ReelJudge reelJudge = new ReelJudge();
     Resources res;
-
-    private boolean testStop = true;
+    int nowbottom=1398;
 
     public SampleHolderCallBack(Resources res) {
         this.res = res;
@@ -34,12 +34,10 @@ public class SampleHolderCallBack implements SurfaceHolder.Callback, Runnable {
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        // TODO 自動生成されたメソッド・スタブ
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        // TODO 自動生成されたメソッド・スタブ
         this.holder = holder;
         thread = new Thread(this);
         thread.start(); //スレッドを開始
@@ -47,69 +45,61 @@ public class SampleHolderCallBack implements SurfaceHolder.Callback, Runnable {
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        // TODO 自動生成されたメソッド・スタブ
         isAttached = false;
         thread = null; //スレッドを終了
     }
 
     @Override
     public void run() {
-        // TODO 自動生成されたメソッド・スタブ
         // メインループ（無限ループ）
         // 画像 h = 1398   Log.w("テスト", ""+ h);
-        int hh = 170;
+
         int th;
-        int scdata;
+        while (true) {
+            while (isAttached) {
 
-        while (isAttached) {
+                Canvas canvas = holder.lockCanvas();
+                // ResourceからBitmapを生成
+                Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.all);
 
-            Canvas canvas = holder.lockCanvas();
-            // ResourceからBitmapを生成
-            Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.all);
+                int w = bitmap.getWidth();
+                int h = bitmap.getHeight();
 
-            int w = bitmap.getWidth();
-            int h = bitmap.getHeight();
+                if (nowbottom <= 0) {
+                    nowbottom = 1398;
+                }
 
-            if (hh <= 0) {
-                hh = 1398;
-            }
+                if (nowbottom <= 199) {
+                    th = 199 - nowbottom;
+                    Rect src = new Rect(0, 0, w, nowbottom);
+                    Rect dst = new Rect(0, th * 2, w * 2, 199 * 2);
+                    canvas.drawBitmap(bitmap, src, dst, null);
 
-            if (hh <= 199) {
-                th = 199 - hh;
-                // 描画元の矩形イメージ
-                Rect src = new Rect(0, 0, w, hh);
-                // 描画先の矩形イメージ
-                Rect dst = new Rect(0, th * 2, w * 2, 199 * 2);
-                //                // 描画処理
-                canvas.drawBitmap(bitmap, src, dst, null);
+                    Rect sr = new Rect(0, 1398 - th, w, 1398);
+                    Rect ds = new Rect(0, 0, w * 2, (199 - nowbottom) * 2);
+                    canvas.drawBitmap(bitmap, sr, ds, null);
+                    holder.unlockCanvasAndPost(canvas);
+                } else {
 
-                // 描画元の矩形イメージ
-                Rect sr = new Rect(0, 1398 - th, w, 1398);
-                // 描画先の矩形イメージ
-                Rect ds = new Rect(0, 0, w * 2, (199 - hh) * 2);
-                // 描画処理
-                canvas.drawBitmap(bitmap, sr, ds, null);
-                holder.unlockCanvasAndPost(canvas);
-            } else {
-
-                // 描画元の矩形イメージ
-                Rect src = new Rect(0, hh - h * 3 / 21, w, hh);
-                // 描画先の矩形イメージ
-                Rect dst = new Rect(0, 0, w * 2, 199 * 2);
-                // 描画処理
-                canvas.drawBitmap(bitmap, src, dst, null);
-                holder.unlockCanvasAndPost(canvas);
-            }
-            hh -= 6;
-            if (testStop == false) {
-                isAttached = false;
+                    // 描画元の矩形イメージ
+                    Rect src = new Rect(0, nowbottom - h * 3 / 21, w, nowbottom);
+                    // 描画先の矩形イメージ
+                    Rect dst = new Rect(0, 0, w * 2, 199 * 2);
+                    // 描画処理
+                    canvas.drawBitmap(bitmap, src, dst, null);
+                    holder.unlockCanvasAndPost(canvas);
+                }
+                nowbottom -= 42;
             }
         }
     }
 
     public void setIsAttached(boolean isAttached) {
-        this.testStop = isAttached;
+        this.isAttached = isAttached;
+        reelJudge.setNow(nowbottom);
+        nowbottom = reelJudge.Judge();
     }
+
 }
 
 

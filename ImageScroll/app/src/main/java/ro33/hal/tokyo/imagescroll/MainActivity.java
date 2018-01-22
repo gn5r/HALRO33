@@ -7,12 +7,12 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.view.View.OnClickListener;
 
 public class MainActivity extends AppCompatActivity {
 
     private SurfaceView surfaceView;
-    private ScrollSurfaceView scrollSurfaceView;
-
+    private  ScrollSurfaceView scrollSurfaceView;
 
 
     @Override
@@ -21,14 +21,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         LinearLayout linearLayout = (LinearLayout)findViewById(R.id.reel) ;
-        ScrollSurfaceView scrollSurfaceView = new ScrollSurfaceView(this);
+        scrollSurfaceView = new ScrollSurfaceView(this);
         linearLayout.addView(scrollSurfaceView);
+//        findViewById(R.id.stop).setOnClickListener(listener);
+
+
     }
+//    OnClickListener listener = new OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//            scrollSurfaceView.stopLeft();
+//        }
+//    };
+
+
 
     public void onClick(View view){
-       // scrollSurfaceView.setIsAttached(false);
-        SampleHolderCallBack sampleHolderCallBack = new SampleHolderCallBack(getResources());
-        sampleHolderCallBack.setIsAttached(false);
-        Toast.makeText(MainActivity.this,"STOP",Toast.LENGTH_SHORT).show();
+       scrollSurfaceView.stopLeft();
+//        SampleHolderCallBack sampleHolderCallBack = new SampleHolderCallBack(getResources());
+//        sampleHolderCallBack.setIsAttached(false);
+//        Toast.makeText(MainActivity.this,"STOP",Toast.LENGTH_SHORT).show();
     }
 }
