@@ -12,6 +12,7 @@
 - 2017年11月27日(月) wroom,Arduino の sampleプログラム追加
 - 2017年12月11日(月) Arduinoを辞めRaspberry Pi3を使うことに
 - 2017年12月17日(日) Pi3Application再編成。ラズパイ→デバイスとのUDP通信も確認
+- 2017年12月30日(土) Android UDP Sampleアプリケーション若干修正
 
 ## GPIO早見表
 <div align="center">
