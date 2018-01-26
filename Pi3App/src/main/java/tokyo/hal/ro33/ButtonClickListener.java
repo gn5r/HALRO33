@@ -27,10 +27,12 @@ public class ButtonClickListener implements GpioPinListenerDigital {
     public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent arg0) {
         System.out.println("GPIO Status:" + arg0.getPin() + " = " + arg0.getState());
         ButtonLED.toggle();
+
         try {
-            udpSend.Send(arg0.getPin().toString().replaceAll("<.+?>" ,"") + "= " + arg0.getState().toString());
+            udpSend.Send(arg0.getPin().toString().replaceAll("<.+?>", "") + "= " + arg0.getState().toString());
         } catch (Exception e) {
         }
+
     }
-    
+
 }
