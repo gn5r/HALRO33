@@ -14,7 +14,7 @@ import android.view.SurfaceView;
 public class ScrollSurfaceView extends SurfaceView {
     private SampleHolderCallBack cb;
 
-    boolean isAttached = true;
+    boolean isAttached = false;
 
     public ScrollSurfaceView(Context context) {
         super(context);
@@ -24,12 +24,16 @@ public class ScrollSurfaceView extends SurfaceView {
         holder.addCallback(cb);
     }
 
-    public void stopLeft(){
-        if(isAttached == true){
-            cb.setIsAttached(false);
+    public void stopLeft(String role) {
+        if (isAttached == true) {
+            cb.setIsAttached(false,role);
             isAttached = false;
-        }else if(isAttached == false){
-            cb.setIsAttached(true);
+        }
+    }
+
+    public void leverOn(){
+        if (isAttached == false) {
+            cb.leverOn(true);
             isAttached = true;
         }
     }

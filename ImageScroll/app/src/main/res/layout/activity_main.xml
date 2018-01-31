@@ -12,24 +12,38 @@
         android:orientation="vertical">
 
 
+        <LinearLayout
+            android:id="@+id/reel"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:id="@+id/reel">
-
-        </LinearLayout>
-
-
-
-        <Button
-            android:id="@+id/stop"
-            android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:text="Stop"
-            android:onClick="onClick"/>
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/lever"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:onClick="leverOn"
+                android:text="Lever"
+                />
+
+
+            <Button
+                android:id="@+id/stop"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/lever"
+                android:onClick="onClick"
+                android:text="Stop" />
+        </LinearLayout>>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
