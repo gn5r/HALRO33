@@ -16,12 +16,11 @@ import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 public class Main {
 
     private static GpioPinDigitalInput maxbet, lever,leftButton, centerButton, rightButton;
-    private static GpioPinDigitalOutput maxbetLED, leftButtonLED, centerButtonLED, rightButtonLED,leverled;
+    private static GpioPinDigitalOutput maxbetLED, leftButtonLED, centerButtonLED, rightButtonLED;
 
     private static UDPReceive udpReceive;
     private static UDPSend udpSend;
     private static int comPort;
-    private static boolean maxbetPushed, leverPushed, leftPushed, centerPushed, rightPushed;
 
     public static void main(String[] args) throws Exception {
         final GpioController gpio = GpioFactory.getInstance();
@@ -84,7 +83,6 @@ public class Main {
 
                             try {
                                 if (gpdsce.getState() == PinState.LOW) {
-                                    maxbetPushed = true;
                                      maxbetLED.low();
                                     udpSend.Send("maxbet");
                                 }
@@ -100,7 +98,6 @@ public class Main {
 
                             try {
                                 if (gpdsce.getState() == PinState.LOW) {
-                                    leverPushed = true;
                                     leftButtonLED.high();
                                     centerButtonLED.high();
                                     rightButtonLED.high();
@@ -112,9 +109,9 @@ public class Main {
                         }
                     });
 
-                    leftButton.addListener(new StopButtonListener(leftButtonLED, "left", leftPushed));
-                    centerButton.addListener(new StopButtonListener(centerButtonLED, "center", centerPushed));
-                    rightButton.addListener(new StopButtonListener(rightButtonLED, "right", rightPushed));
+                    leftButton.addListener(new StopButtonListener(leftButtonLED, "left"));
+                    centerButton.addListener(new StopButtonListener(centerButtonLED, "center"));
+                    rightButton.addListener(new StopButtonListener(rightButtonLED, "right"));
 
                     maxbetLED.high();
                     leftButtonLED.low();
@@ -129,6 +126,10 @@ public class Main {
                     centerButtonLED.high();
                     rightButtonLED.high();
                     break;
+                    
+                case "next":
+                    maxbetLED.high();
+                    break;
 
                 default:
                     break;
@@ -141,12 +142,10 @@ public class Main {
 
         private final GpioPinDigitalOutput ButtonLED;
         private final String text;
-        private boolean pushed;
 
-        public StopButtonListener(GpioPinDigitalOutput ButtonLED, String text, boolean pushed) {
+        public StopButtonListener(GpioPinDigitalOutput ButtonLED, String text) {
             this.ButtonLED = ButtonLED;
             this.text = text;
-            this.pushed = pushed;
         }
 
         @Override
@@ -156,7 +155,6 @@ public class Main {
                 if(gpdsce.getState() == PinState.LOW){
                     ButtonLED.low();
                     udpSend.Send(text);
-                    maxbetLED.toggle();
                 }
 
             } catch (Exception e) {
