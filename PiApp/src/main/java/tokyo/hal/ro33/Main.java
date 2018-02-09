@@ -156,6 +156,7 @@ public class Main {
                 if(gpdsce.getState() == PinState.LOW){
                     ButtonLED.low();
                     udpSend.Send(text);
+                    maxbetLED.toggle();
                 }
 
             } catch (Exception e) {
