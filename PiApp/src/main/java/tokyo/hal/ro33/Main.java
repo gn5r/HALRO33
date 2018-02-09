@@ -71,11 +71,12 @@ public class Main {
     public void Receive(String text) throws Exception {
         if (!text.isEmpty()) {
 
+            System.out.println(text);
+            
             switch (text) {
                 case "connect":
                     System.out.println("OK,connected IPAddress:" + udpReceive.getConnectIP());
                     udpSend = new UDPSend(udpReceive.getConnectIP(), comPort);
-                    udpSend.Send("接続しました");
 
                     maxbet.addListener(new GpioPinListenerDigital() {
                         @Override
@@ -125,6 +126,7 @@ public class Main {
                     leftButtonLED.high();
                     centerButtonLED.high();
                     rightButtonLED.high();
+                    udpSend.Send("maxbet");
                     break;
                     
                 case "next":
