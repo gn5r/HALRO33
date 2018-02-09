@@ -13,6 +13,7 @@
 - 2017年12月11日(月) Arduinoを辞めRaspberry Pi3を使うことに
 - 2017年12月17日(日) Pi3Application再編成。ラズパイ→デバイスとのUDP通信も確認
 - 2017年12月30日(土) Android UDP Sampleアプリケーション若干修正
+- 2017年2月9日(金) Raspberry Piアプリケーション再作成 
 
 ## GPIO早見表
 <div align="center">
