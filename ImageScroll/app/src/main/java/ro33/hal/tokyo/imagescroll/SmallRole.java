@@ -2,10 +2,6 @@ package ro33.hal.tokyo.imagescroll;
 
 import java.util.Random;
 
-/**
- * Created by shelleden on 2018/01/26.
- */
-
 public class SmallRole implements Runnable {
 
     String role;
@@ -42,7 +38,7 @@ public class SmallRole implements Runnable {
     }
 
     public String getSmallRole() {
-        role = "ベル";
+        role="中チェ";
         return role;
     }
 }

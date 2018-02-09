@@ -1,49 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="ro33.hal.tokyo.imagescroll.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_menu_rotate"
+            android:onClick="sendMessage"/>
 
-        <LinearLayout
-            android:id="@+id/reel"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/lever"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:onClick="leverOn"
-                android:text="Lever"
-                />
-
-
-            <Button
-                android:id="@+id/stop"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/lever"
-                android:onClick="onClick"
-                android:text="Stop" />
-        </LinearLayout>>
+        <TextView
+            android:id="@+id/myIP"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Show my IPAddress"
+            android:textSize="20sp"
+            tools:layout_editor_absoluteY="363dp" />
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/reel"
+        android:layout_width="match_parent"
+        android:layout_height="300sp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/leftreel"
+            android:layout_width="match_parent"
+            android:layout_height="300sp"
+            android:layout_weight="1"
+            android:orientation="horizontal"></LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/centerreel"
+            android:layout_width="match_parent"
+            android:layout_height="300sp"
+            android:layout_weight="1"
+            android:orientation="horizontal"></LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/rightreel"
+            android:layout_width="match_parent"
+            android:layout_height="300sp"
+            android:layout_weight="1"
+            android:orientation="horizontal"></LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100sp"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="411dp">
+
+        <Button
+            android:id="@+id/lever"
+            android:layout_width="100sp"
+            android:layout_height="100sp"
+            android:onClick="leverOn"
+            android:text="Lever" />
+
+
+        <Button
+            android:id="@+id/stop"
+            android:layout_width="match_parent"
+            android:layout_height="100sp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/lever"
+            android:layout_weight="1"
+            android:onClick="onClick"
+            android:text="Stop" />
+
+        <Button
+            android:id="@+id/centerstop"
+            android:layout_width="match_parent"
+            android:layout_height="100sp"
+            android:layout_weight="1"
+            android:onClick="onClick_C"
+            android:text="Stop" />
+
+        <Button
+            android:id="@+id/rightstop"
+            android:layout_width="match_parent"
+            android:layout_height="100sp"
+            android:layout_weight="1"
+            android:onClick="onClick_R"
+            android:text="STOP" />
+    </LinearLayout>
+
+</LinearLayout>

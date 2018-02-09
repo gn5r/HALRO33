@@ -2,7 +2,6 @@ package ro33.hal.tokyo.imagescroll;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.Log;
@@ -13,8 +12,10 @@ public class SampleHolderCallBack implements SurfaceHolder.Callback, Runnable {
 
     private SurfaceHolder holder = null;
     private Thread thread = null;
-    private boolean isAttached = false;
-    private ReelJudge reelJudge = new ReelJudge();
+    private boolean isAttached;
+    private ReelJudge reelJudge;
+    private SetPlace setPlace;
+    byte place;
     Resources res;
     int nowbottom;
     int th;
@@ -24,13 +25,15 @@ public class SampleHolderCallBack implements SurfaceHolder.Callback, Runnable {
     int w;
     int h;
 
-    public SampleHolderCallBack(Resources res) {
+    public SampleHolderCallBack(Resources res, Bitmap bitmap, byte place, SetPlace setPlace) {
+        this.setPlace = setPlace;
         this.res = res;
-        bitmap = BitmapFactory.decodeResource(res, R.drawable.versus_left);
+        this.bitmap = bitmap;
         w = bitmap.getWidth();
-//        h = bitmap.getHeight();
         h = 1020;
-        nowbottom = h;
+        nowbottom = 1020;
+        this.place = place;
+        reelJudge=new ReelJudge(setPlace);
     }
 
     @Override
@@ -55,28 +58,39 @@ public class SampleHolderCallBack implements SurfaceHolder.Callback, Runnable {
         // メインループ（無限ループ）
         // 画像 h = h
         while (true) {
-            while (isAttached) {
+            if (isAttached == true) {
                 nowbottom -= 20;
                 drawReel();
             }
         }
     }
 
-    public void setIsAttached(boolean isAttached, String role) {
+    public void setisAttached(boolean isAttached, String role) {
         this.isAttached = isAttached;
         reelJudge.setNow(nowbottom);
-        cnt = reelJudge.Judge(role);
+        cnt = reelJudge.Judge(role, place);
         Log.d("tes1", String.valueOf(nowbottom));
         Log.d("tes2", String.valueOf(cnt));
         if (cnt > 0) {
             for (; cnt > 0; cnt--) {
-                if (nowbottom==0){
-                    nowbottom=1020;
+                if (nowbottom == 0) {
+                    nowbottom = 1020;
                 }
                 nowbottom -= 20;
                 drawReel();
             }
         }
+        switch (place) {
+            case 1:
+                setPlace.setLeft(nowbottom);
+                break;
+            case 3:
+                setPlace.setRight(nowbottom);
+                break;
+            default:
+                break;
+        }
+
         Log.d("tes3", String.valueOf(nowbottom));
         alignment();
         drawReel();
