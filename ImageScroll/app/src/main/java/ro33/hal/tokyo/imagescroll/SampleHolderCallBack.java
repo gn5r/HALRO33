@@ -56,7 +56,6 @@ public class SampleHolderCallBack implements SurfaceHolder.Callback, Runnable {
     @Override
     public void run() {
         // メインループ（無限ループ）
-        // 画像 h = h
         while (true) {
             if (isAttached == true) {
                 nowbottom -= 20;
@@ -83,6 +82,9 @@ public class SampleHolderCallBack implements SurfaceHolder.Callback, Runnable {
         switch (place) {
             case 1:
                 setPlace.setLeft(nowbottom);
+                break;
+            case 2:
+                setPlace.setCenter(nowbottom);
                 break;
             case 3:
                 setPlace.setRight(nowbottom);

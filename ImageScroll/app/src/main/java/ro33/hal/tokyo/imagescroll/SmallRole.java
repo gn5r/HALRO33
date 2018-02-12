@@ -38,7 +38,7 @@ public class SmallRole implements Runnable {
     }
 
     public String getSmallRole() {
-        role="中チェ";
+        role="チャンス目B";
         return role;
     }
 }

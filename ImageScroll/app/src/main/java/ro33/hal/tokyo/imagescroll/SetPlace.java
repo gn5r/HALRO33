@@ -10,17 +10,10 @@ public class SetPlace {
     int left_num;
     int right;
     int right_num;
+    int center;
 
     public void setLeft(int left) {
         this.left = left;
-    }
-
-    public void setRight(int right) {
-        this.right = right;
-    }
-
-    public int getLeft(){
-
         if (left == 980) {
             left_num = 2;
         } else if (left == 920) {
@@ -61,13 +54,13 @@ public class SetPlace {
             left_num = 20;
         } else if (left == 60) {
             left_num = 21;
-        }else {
-            left_num=1;
+        } else {
+            left_num = 1;
         }
-        return left_num;
     }
 
-    public int getRight(){
+    public void setRight(int right) {
+        this.right = right;
         if (right == 980) {
             right_num = 2;
         } else if (right == 920) {
@@ -108,9 +101,22 @@ public class SetPlace {
             right_num = 20;
         } else if (right == 60) {
             right_num = 21;
-        }else {
-            right_num=1;
+        } else {
+            right_num = 1;
         }
-        return right;
+    }
+
+    public void setCenter(int center) {
+        this.center = center;
+    }
+
+    public int getLeft() {
+
+
+        return left_num;
+    }
+
+    public int getRight() {
+        return right_num;
     }
 }
