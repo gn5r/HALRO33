@@ -11,6 +11,7 @@ public class SetPlace {
     int right;
     int right_num;
     int center;
+    int center_num;
 
     public void setLeft(int left) {
         this.left = left;
@@ -107,6 +108,49 @@ public class SetPlace {
     }
 
     public void setCenter(int center) {
+        if (center == 980) {
+            center_num = 2;
+        } else if (center == 920) {
+            center_num = 3;
+        } else if (center == 880) {
+            center_num = 4;
+        } else if (center == 840) {
+            center_num = 5;
+        } else if (center == 780) {
+            center_num = 6;
+        } else if (center == 740) {
+            center_num = 7;
+        } else if (center == 680) {
+            center_num = 8;
+        } else if (center == 640) {
+            center_num = 9;
+        } else if (center == 580) {
+            center_num = 10;
+        } else if (center == 540) {
+            center_num = 11;
+        } else if (center == 480) {
+            center_num = 12;
+        } else if (center == 440) {
+            center_num = 13;
+        } else if (center == 400) {
+            center_num = 14;
+        } else if (center == 340) {
+            center_num = 15;
+        } else if (center == 300) {
+            center_num = 16;
+        } else if (center == 240) {
+            center_num = 17;
+        } else if (center == 200) {
+            center_num = 18;
+        } else if (center == 140) {
+            center_num = 19;
+        } else if (center == 100) {
+            center_num = 20;
+        } else if (center == 60) {
+            center_num = 21;
+        } else {
+            center_num = 1;
+        }
         this.center = center;
     }
 

@@ -6,11 +6,12 @@ public class SmallRole implements Runnable {
 
     String role;
     Random random = new Random();
+    int iRand;
 
     @Override
     public void run() {
 
-        int iRand = random.nextInt(65535);
+        iRand = random.nextInt(65535);
 
         if (iRand >= 0 && iRand <= 39844) {
             role = "ハズレ";

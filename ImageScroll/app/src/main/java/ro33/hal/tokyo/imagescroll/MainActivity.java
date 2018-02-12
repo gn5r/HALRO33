@@ -28,14 +28,25 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     private ScrollSurfaceView2 scrollSurfaceView2;
     private ScrollSurfaceView3 scrollSurfaceView3;
     private SmallRole smallRole;
+    private SmallRolePay smallRolePay =new SmallRolePay();
+    private CreditCalculation creditCalculation=new CreditCalculation();
     public SetPlace setPlace = new SetPlace();
     public boolean replay;
     String role;
 
-    public boolean left;
-    public boolean right;
-    public boolean center;
-    byte cnt;
+    private boolean BOUNUS;
+    private boolean ART;
+    private boolean left;
+    private boolean right;
+    private boolean center;
+    private boolean lever;
+    private boolean maxBet;
+    private boolean error;
+    private byte state;
+    private int credit;
+    private int pay;
+
+    private byte cnt;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +54,16 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         setContentView(R.layout.activity_main);
 
         handler = new Handler();
+
+        BOUNUS=false;
+        ART=false;
+        left=false;
+        right=false;
+        center=false;
+        lever=false;
+        maxBet=true;
+        error=false;
+        state=1;
 
         SharedPreferences preferences = getSharedPreferences("UDPData", MODE_PRIVATE);
 
@@ -101,45 +122,74 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         }
     }
 
-    public void onClick() {
+    private void onClick() {
         if (left == true) {
+            if (cnt != 0) {
+                error = true;
+            }
             cnt++;
             scrollSurfaceView.stop(role);
             left = false;
         }
     }
 
-    public void onClick_C() {
+    private void onClick_C() {
         if (center == true) {
+            if (cnt != 2) {
+                error = true;
+            }
             cnt++;
             scrollSurfaceView2.stop(role);
             center = false;
         }
     }
 
-    public void onClick_R() {
+    private void onClick_R() {
         if (right == true) {
+            if (cnt != 1) {
+                error = true;
+            }
             cnt++;
             scrollSurfaceView3.stop(role);
             right = false;
         }
     }
 
-    public void leverOn() {
-        replay = false;
-        left = true;
-        right = true;
-        center = true;
-        cnt = 0;
-        role = smallRole.getSmallRole();
-        scrollSurfaceView.leverOn();
-        scrollSurfaceView2.leverOn();
-        scrollSurfaceView3.leverOn();
-        if (role == "リプレイ") {
-            replay = true;
+    private void leverOn() {
+        if (lever == true) {
+            replay = false;
+            left = true;
+            right = true;
+            center = true;
+            cnt = 0;
+            role = smallRole.getSmallRole();
+            scrollSurfaceView.leverOn();
+            scrollSurfaceView2.leverOn();
+            scrollSurfaceView3.leverOn();
+            if (role == "リプレイ") {
+                replay = true;
+            }
         }
     }
 
+    private void maxBetOn() {
+        if (maxBet == true) {
+            maxBet = false;
+            lever = true;
+        }
+    }
+
+    private void credit() {
+        credit=creditCalculation.getCredit();
+        if (credit < 0) {
+            credit = 0;
+        }
+        if (credit > 50) {
+            credit = 50;
+        }
+        TextView view = (TextView) findViewById(R.id.credit);
+        view.setText(credit);
+    }
 
     protected void onDestroy() {
         super.onDestroy();
@@ -201,29 +251,37 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             @Override
             public void run() {
                 if (!TextUtils.isEmpty(text)) {
-                    ((TextView) findViewById(R.id.message)).setText(text);
 
                     switch (text) {
                         case "maxbet":
-                            showText("レバーに気合を入れろ！");
+                            maxBetOn();
+                            creditCalculation.maxBet();
+                            credit();
                             break;
                         case "lever":
-                            if (replay == true){
+                            if (replay == true) {
                                 replay = false;
                             }
                             leverOn();
                             break;
                         case "left":
                             onClick();
+                            if (cnt == 3) {
+
+                                sendReplayFlag();
+                            }
                             break;
                         case "center":
                             onClick_C();
-                            if (cnt == 3){
+                            if (cnt == 3) {
                                 sendReplayFlag();
                             }
                             break;
                         case "right":
                             onClick_R();
+                            if (cnt == 3) {
+                                sendReplayFlag();
+                            }
                             break;
                         default:
                             showText("受信データ:" + text);
@@ -237,7 +295,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     public ArrayList<UDPData> getList() {
         return list;
     }
-
 
     public void setPref(ArrayList<UDPData> udpData, int count) {
         SharedPreferences preferences = getSharedPreferences("UDPData", MODE_PRIVATE);
