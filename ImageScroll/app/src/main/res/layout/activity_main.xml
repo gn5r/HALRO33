@@ -145,11 +145,11 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/artgame"
+                        android:id="@+id/artcoin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20sp"
-                        android:text="10000"
+                        android:text="0"
                         android:textAlignment="center"
                         android:textColor="#0f0"
                         android:textSize="36sp" />
@@ -218,7 +218,17 @@
                     android:background="#111"
                     android:layout_margin="10sp"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"></LinearLayout>
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/smallrolesisa"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textAlignment="center"
+                        android:textColor="#f00"
+                        android:textSize="120sp" />
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
@@ -228,35 +238,89 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/credit"
-                android:layout_width="100sp"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textAlignment="center"
-                android:textColor="#000"
-                android:textSize="30sp" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/artcount"
-                android:layout_width="185sp"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textAlignment="center"
-                android:textColor="#000"
-                android:textSize="30sp" />
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="credit"
+                    android:textAlignment="center"
+                    android:textColor="#000" />
 
-            <TextView
-                android:id="@+id/pay"
-                android:layout_width="100sp"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textAlignment="center"
-                android:textColor="#000"
-                android:textSize="30sp" />
+                <TextView
+                    android:id="@+id/credit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textColor="#000"
+                    android:textSize="30sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="PAY"
+                    android:textAlignment="center"
+                    android:textColor="#000" />
+
+                <TextView
+                    android:id="@+id/pay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textColor="#000"
+                    android:textSize="30sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="artgame"
+                    android:textAlignment="center"
+                    android:textColor="#000" />
+
+                <TextView
+                    android:id="@+id/artcount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textColor="#000"
+                    android:textSize="30sp" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/maxbet"
+        android:layout_width="100sp"
+        android:layout_height="50sp"
+        android:text="MAXBET"
+        android:onClick="maxBetOn"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -267,7 +331,7 @@
         <Button
             android:id="@+id/lever"
             android:layout_width="100sp"
-            android:layout_height="100sp"
+            android:layout_height="50sp"
             android:onClick="leverOn"
             android:text="Lever" />
 
@@ -275,7 +339,7 @@
         <Button
             android:id="@+id/stop"
             android:layout_width="match_parent"
-            android:layout_height="100sp"
+            android:layout_height="50sp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/lever"
@@ -286,7 +350,7 @@
         <Button
             android:id="@+id/centerstop"
             android:layout_width="match_parent"
-            android:layout_height="100sp"
+            android:layout_height="50sp"
             android:layout_weight="1"
             android:onClick="onClick_C"
             android:text="Stop" />
@@ -294,7 +358,7 @@
         <Button
             android:id="@+id/rightstop"
             android:layout_width="match_parent"
-            android:layout_height="100sp"
+            android:layout_height="50sp"
             android:layout_weight="1"
             android:onClick="onClick_R"
             android:text="STOP" />

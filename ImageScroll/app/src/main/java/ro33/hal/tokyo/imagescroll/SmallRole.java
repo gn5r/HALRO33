@@ -39,7 +39,18 @@ public class SmallRole implements Runnable {
     }
 
     public String getSmallRole() {
-        role="チャンス目B";
         return role;
     }
+
+    public String getBounusRole(){
+
+        if (iRand >= 0 && iRand <= 5374){
+            role="リプレイ";
+        }else {
+            role="ベル";
+        }
+
+        return role;
+    }
+
 }

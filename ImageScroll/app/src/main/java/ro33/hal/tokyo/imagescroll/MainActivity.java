@@ -2,6 +2,7 @@ package ro33.hal.tokyo.imagescroll;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.content.SharedPreferences;
@@ -28,14 +29,23 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     private ScrollSurfaceView2 scrollSurfaceView2;
     private ScrollSurfaceView3 scrollSurfaceView3;
     private SmallRole smallRole;
-    private SmallRolePay smallRolePay =new SmallRolePay();
-    private CreditCalculation creditCalculation=new CreditCalculation();
+    private StateLottery stateLottery;
+    private SmallRolePay smallRolePay;
+    private CreditCalculation creditCalculation = new CreditCalculation();
     public SetPlace setPlace = new SetPlace();
     public boolean replay;
     String role;
 
     private boolean BOUNUS;
-    private boolean ART;
+    private boolean BOUNUS_LAST;
+    TextView artcnt;
+    TextView artcoincount;
+    TextView coincount;
+    TextView setpay;
+    TextView totalgamecount;
+    TextView gamecount;
+    TextView smallsisa;
+    private int ART;
     private boolean left;
     private boolean right;
     private boolean center;
@@ -43,10 +53,16 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     private boolean maxBet;
     private boolean error;
     private byte state;
+    private int stock;
     private int credit;
+    private int coin;
+    private int totalgame;
+    private int gamenum;
     private int pay;
+    private int artcoin;
 
     private byte cnt;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,15 +71,29 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         handler = new Handler();
 
-        BOUNUS=false;
-        ART=false;
-        left=false;
-        right=false;
-        center=false;
-        lever=false;
-        maxBet=true;
-        error=false;
-        state=1;
+        BOUNUS = false;
+        ART = 0;
+        left = false;
+        right = false;
+        center = false;
+        lever = false;
+        maxBet = true;
+        error = false;
+        state = 1;
+        coin = 0;
+        stock = 1;
+        credit = 0;
+        totalgame = 0;
+        artcoin = 0;
+
+
+        setpay = findViewById(R.id.pay);
+        artcoincount = findViewById(R.id.artcoin);
+        artcnt = (TextView) findViewById(R.id.artcount);
+        coincount = (TextView) findViewById(R.id.coincount);
+        totalgamecount = findViewById(R.id.totalcount);
+        gamecount = findViewById(R.id.count);
+        smallsisa=findViewById(R.id.smallrolesisa);
 
         SharedPreferences preferences = getSharedPreferences("UDPData", MODE_PRIVATE);
 
@@ -93,37 +123,88 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         linearLayout1.addView(scrollSurfaceView2);
         linearLayout2.addView(scrollSurfaceView3);
         smallRole = new SmallRole();
+        smallRolePay = new SmallRolePay();
+        stateLottery = new StateLottery();
 
-        ScheduledThreadPoolExecutor schedule = new ScheduledThreadPoolExecutor(1);
+        ScheduledThreadPoolExecutor schedule = new ScheduledThreadPoolExecutor(2);
         schedule.scheduleWithFixedDelay(smallRole, 0, 1, TimeUnit.MILLISECONDS);
+        schedule.scheduleWithFixedDelay(stateLottery, 0, 2, TimeUnit.SECONDS);
 
     }
 
     public void onClick(View view) {
-        scrollSurfaceView.stop(role);
-    }
-
-    public void onClick_C(View view) {
-        scrollSurfaceView2.stop(role);
-    }
-
-    public void onClick_R(View view) {
-        scrollSurfaceView3.stop(role);
-    }
-
-    public void leverOn(View view) {
-        replay = false;
-        role = smallRole.getSmallRole();
-        scrollSurfaceView.leverOn();
-        scrollSurfaceView2.leverOn();
-        scrollSurfaceView3.leverOn();
-        if (role == "リプレイ") {
-            replay = true;
+        onClick();
+        if (cnt == 3) {
+            sendNextgame();
+            maxBet = true;
+            if (role == "7" || role == "V" || role == "バケ") {
+                BOUNUS = true;
+                ART = 50;
+                if (role == "バケ") {
+                    ART = 30;
+                }
+            }
+            artcnt.setText(String.valueOf(ART));
         }
     }
 
+    public void onClick_C(View view) {
+        onClick_C();
+        if (cnt == 3) {
+            if (role == "リプレイ" && error == false) {
+                replay = true;
+                sendReplayFlag();
+                maxBet=false;
+                lever=true;
+            } else {
+                sendNextgame();
+                maxBet = true;
+            }
+
+            if (role == "7" || role == "V" || role == "バケ") {
+                BOUNUS = true;
+                ART = 5;
+                if (role == "バケ") {
+                    ART = 30;
+                }
+                artcnt.setText(String.valueOf(ART));
+            }
+        }
+    }
+
+    public void onClick_R(View view) {
+        onClick_R();
+        if (cnt == 3) {
+            if (role == "7" || role == "V" || role == "バケ") {
+                BOUNUS = true;
+                ART = 50;
+                if (role == "バケ") {
+                    ART = 30;
+                }
+                artcnt.setText(String.valueOf(ART));
+            }
+            sendNextgame();
+            maxBet = true;
+        }
+    }
+
+    public void leverOn(View view) {
+        if (replay == true) {
+            replay = false;
+        }
+        leverOn();
+    }
+
+    public void maxBetOn(View view) {
+        maxBetOn();
+    }
+
     private void onClick() {
-        if (left == true) {
+        if (role == "7" || role == "バケ" || role == "V") {
+            cnt++;
+            scrollSurfaceView.stop(role);
+            left = false;
+        } else if (left == true) {
             if (cnt != 0) {
                 error = true;
             }
@@ -134,18 +215,80 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     }
 
     private void onClick_C() {
-        if (center == true) {
+        if (role == "7" || role == "バケ" || role == "V") {
+            cnt++;
+            scrollSurfaceView2.stop(role);
+            center = false;
+        } else if (center == true) {
             if (cnt != 2) {
                 error = true;
             }
             cnt++;
             scrollSurfaceView2.stop(role);
+            if (role == "スイカ" || role == "強スイカ") {
+                int l = setPlace.getLeft();
+                int r = setPlace.getRight();
+                int c = setPlace.getCenter();
+                byte ls;
+                byte rs;
+                byte cs;
+                if (l == 5 || l == 12 || l == 15) {//上
+                    ls = 1;
+                } else if (l == 6 || l == 13 || l == 16) {//中
+                    ls = 2;
+                } else if (l == 7 || l == 17) {//下
+                    ls = 3;
+                } else {//ハズレ
+                    ls = 4;
+                }
+                if (r == 4 || r == 8 || r == 13 || r == 17 || r == 21) {
+                    rs = 1;
+                } else if (r == 1 || r == 5 || r == 9 || r == 14 || r == 18) {
+                    rs = 2;
+                } else if (r == 2 || r == 6 || r == 10 || r == 15 || r == 19) {
+                    rs = 3;
+                } else {
+                    rs = 4;
+                }
+                if (c == 1 || c == 14) {
+                    cs = 1;
+                } else if (c == 2 || c == 15) {
+                    cs = 2;
+                } else if (c == 3 || c == 16) {
+                    cs = 3;
+                } else {
+                    cs = 4;
+                }
+
+                if ((ls == 1 && rs == 1 && ls == 1) || (ls == 3 && rs == 3 && cs == 3) ||
+                        ((ls == 1 || ls == 2 || ls == 3) && (rs == 1 || rs == 2 || rs == 3) && cs == 2)) {
+                    pay = smallRolePay.pay(role);
+                } else {
+                    pay = smallRolePay.pay("ハズレ");
+                }
+
+            } else {
+                pay = smallRolePay.pay(role);
+            }
+            if (BOUNUS) {
+                artcoin += pay;
+                artcoincount.setText(String.valueOf(artcoin));
+            }
+            setpay.setText(String.valueOf(pay));
+            creditCalculation.centerButton(pay);
+            coin += pay;
+            coincount.setText(String.valueOf(coin));
+            credit();
             center = false;
         }
     }
 
     private void onClick_R() {
-        if (right == true) {
+        if (role == "7" || role == "バケ" || role == "V") {
+            cnt++;
+            scrollSurfaceView3.stop(role);
+            right = false;
+        } else if (right == true) {
             if (cnt != 1) {
                 error = true;
             }
@@ -157,30 +300,150 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
     private void leverOn() {
         if (lever == true) {
+            lever = false;
             replay = false;
             left = true;
             right = true;
             center = true;
+            error = false;
             cnt = 0;
-            role = smallRole.getSmallRole();
+            totalgame += 1;
+            gamenum += 1;
+            if (BOUNUS == true) {
+                gamenum = 0;
+            }
+            totalgamecount.setText(String.valueOf(totalgame));
+            gamecount.setText(String.valueOf(gamenum));
+            if (BOUNUS_LAST == true) {
+                BOUNUS_LAST=false;
+                state = stateLottery.getNextState();
+                stateLottery.nextState=1;
+                if (state == 1 && 0 < stock) {
+                    state = stateLottery.getStockStateLotterry();
+                    stock -= 1;
+                }
+                if (state!=6&&state!=7&&state!=8){
+                    artcoin=0;
+                    artcoincount.setText(String.valueOf(artcoin));
+                }
+            }
+            switch (state) {
+                case 1:
+                    role = smallRole.getSmallRole();
+                    state = stateLottery.getState(role);
+                    if (role == "中断チェリー") {
+                        stock += 5;
+                    }
+                    break;
+                case 2:
+                    role = smallRole.getSmallRole();
+                    state = stateLottery.getState(role);
+                    if (role == "中断チェリー") {
+                        stock += 5;
+                    }
+                    break;
+                case 3:
+                    role = smallRole.getSmallRole();
+                    state = stateLottery.getState(role);
+                    if (role == "中断チェリー") {
+                        stock += 5;
+                    }
+                    break;
+                case 4:
+                    role = smallRole.getSmallRole();
+                    state = stateLottery.getState(role);
+                    if (role == "中断チェリー") {
+                        stock += 5;
+                    }
+                    break;//通常時　case 1 - 4
+                case 6:
+                    role = smallRole.getSmallRole();
+                    if (BOUNUS == false) {
+                        role = "7";
+                    } else {
+                        ART -= 1;
+                        if (role == "ハズレ") {
+                            role = smallRole.getBounusRole();
+                        }
+                        if (ART == 0) {
+                            BOUNUS_LAST = true;
+                            stateLottery.endBOUNUS(role);
+                            BOUNUS = false;
+                        }
+                        artcnt.setText(String.valueOf(ART));
+                    }
+                    stock += stateLottery.stockLottery(role);
+                    break;
+                case 7:
+                    role = smallRole.getSmallRole();
+                    if (BOUNUS == false) {
+                        role = "V";
+                    } else {
+                        ART -= 1;
+                        if (role == "ハズレ") {
+                            role = smallRole.getBounusRole();
+                        }
+                        if (ART == 0) {
+                            BOUNUS_LAST = true;
+                            stateLottery.endBOUNUS(role);
+                            BOUNUS = false;
+                        }
+                        artcnt.setText(String.valueOf(ART));
+                    }
+                    stock += stateLottery.stockLottery(role);
+                    break;
+                case 8:
+                    role = smallRole.getSmallRole();
+                    if (BOUNUS == false) {
+                        role = "バケ";
+                    } else {
+                        ART -= 1;
+                        if (role == "ハズレ") {
+                            role = smallRole.getBounusRole();
+                        }
+                        if (ART == 0) {
+                            BOUNUS_LAST = true;
+                            stateLottery.endBOUNUS(role);
+                            BOUNUS = false;
+                        }
+                        artcnt.setText(String.valueOf(ART));
+                    }
+                    stock += stateLottery.stockLottery(role);
+                    break;
+            }
+            if (role=="ハズレ"||role=="ベル"||role=="リプレイ"||role=="スイカ"){
+                smallsisa.setText("　" );
+            }else if (role=="7"||role=="V"||role=="バケ"){
+                smallsisa.setText("当");
+            }else {
+                smallsisa.setText("!");
+            }
             scrollSurfaceView.leverOn();
             scrollSurfaceView2.leverOn();
             scrollSurfaceView3.leverOn();
-            if (role == "リプレイ") {
-                replay = true;
-            }
+
         }
     }
 
     private void maxBetOn() {
         if (maxBet == true) {
             maxBet = false;
+            coin -= 3;
+            coincount.setText(String.valueOf(coin));
             lever = true;
         }
+        if (replay == true) {
+            replay = false;
+            lever = true;
+        } else {
+            creditCalculation.maxBet();
+            credit();
+        }
+        Log.d("MAX",String.valueOf(lever));
     }
 
     private void credit() {
-        credit=creditCalculation.getCredit();
+        credit = creditCalculation.getCredit();
         if (credit < 0) {
             credit = 0;
         }
@@ -188,7 +451,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             credit = 50;
         }
         TextView view = (TextView) findViewById(R.id.credit);
-        view.setText(credit);
+        view.setText(String.valueOf(credit));
     }
 
     protected void onDestroy() {
@@ -229,7 +492,15 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
     public void sendReplayFlag() {
         try {
-            new UDPSendTask(MainActivity.this, IPAddress, Integer.parseInt(comPort)).execute("Replay");
+            new UDPSendTask(MainActivity.this, IPAddress, Integer.parseInt(comPort)).execute("replay");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendNextgame() {
+        try {
+            new UDPSendTask(MainActivity.this, IPAddress, Integer.parseInt(comPort)).execute("next");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -251,12 +522,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             @Override
             public void run() {
                 if (!TextUtils.isEmpty(text)) {
-
+                    Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
                     switch (text) {
                         case "maxbet":
                             maxBetOn();
-                            creditCalculation.maxBet();
-                            credit();
                             break;
                         case "lever":
                             if (replay == true) {
@@ -267,24 +536,61 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                         case "left":
                             onClick();
                             if (cnt == 3) {
-
-                                sendReplayFlag();
+                                sendNextgame();
+                                maxBet = true;
+                                if (role == "7" || role == "V" || role == "バケ") {
+                                    BOUNUS = true;
+                                    ART = 50;
+                                    if (role == "バケ") {
+                                        ART = 30;
+                                    }
+                                }
+                                artcnt.setText(String.valueOf(ART));
                             }
                             break;
                         case "center":
                             onClick_C();
                             if (cnt == 3) {
-                                sendReplayFlag();
+                                if (role == "リプレイ" && error == false) {
+                                    replay = true;
+                                    sendReplayFlag();
+                                    maxBet=false;
+                                    lever=true;
+                                } else {
+                                    coincount.setText(String.valueOf(coin));
+                                    sendNextgame();
+
+                                    maxBet = true;
+                                }
+                                if (role == "7" || role == "V" || role == "バケ") {
+                                    BOUNUS = true;
+                                    ART = 50;
+                                    if (role == "バケ") {
+                                        ART = 30;
+                                    }
+                                    Log.d("V",String.valueOf(maxBet));
+                                    artcnt.setText(String.valueOf(ART));
+                                    Log.d("V",String.valueOf(maxBet));
+                                    maxBet = true;
+                                }
                             }
                             break;
                         case "right":
                             onClick_R();
                             if (cnt == 3) {
-                                sendReplayFlag();
+                                if (role == "7" || role == "V" || role == "バケ") {
+                                    BOUNUS = true;
+                                    ART = 50;
+                                    if (role == "バケ") {
+                                        ART = 30;
+                                    }
+                                    artcnt.setText(String.valueOf(ART));
+                                }
+                                sendNextgame();
+                                maxBet = true;
                             }
                             break;
                         default:
-                            showText("受信データ:" + text);
                             break;
                     }
                 }

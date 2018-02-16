@@ -36,6 +36,5 @@ public class UDPSendTask extends AsyncTask<String, Void, String> {
 
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        mainActivity.showText("送信しました");
     }
 }

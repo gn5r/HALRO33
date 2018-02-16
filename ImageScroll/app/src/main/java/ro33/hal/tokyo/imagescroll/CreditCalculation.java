@@ -12,6 +12,10 @@ public class CreditCalculation {
         credit -=3;
     }
 
+    public void centerButton(int pay){
+        credit += pay;
+    }
+
     public int getCredit(){
         return credit;
     }

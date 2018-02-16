@@ -25,7 +25,7 @@ public class SmallRolePay {
                 pay=10;
                 break;
             case "スイカ":
-                pay=3;
+                pay=10;
                 break;
             case "強スイカ":
                 pay=10;
@@ -43,7 +43,7 @@ public class SmallRolePay {
                 pay=10;
                 break;
             case "中チェ":
-                pay=0;
+                pay=3;
                 break;
             default:
                 break;

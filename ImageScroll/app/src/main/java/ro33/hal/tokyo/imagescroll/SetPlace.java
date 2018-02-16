@@ -155,12 +155,14 @@ public class SetPlace {
     }
 
     public int getLeft() {
-
-
         return left_num;
     }
 
     public int getRight() {
         return right_num;
+    }
+
+    public int getCenter(){
+        return center_num;
     }
 }

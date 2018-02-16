@@ -172,6 +172,22 @@ public class ReelJudge {
                 remainder = now + 40;
             }
         }//中チェ
+        if (role == "7" || role == "バケ") {
+            if (1020 >= now && now >= 480) {
+                remainder = now - 480;
+            } else {
+                remainder = now + (1020 - 480);
+            }
+        }
+        if (role == "V") {
+            if (1020 >= now && now >= 920) {
+                remainder = now - 920;
+            } else if (900 >= now && now >= 200) {
+                remainder = now - 200;
+            } else if (180 >= now && now >= 0) {
+                remainder = now + (1020 - 920);
+            }
+        }
     }
 
     private void centerReel() {
@@ -390,7 +406,7 @@ public class ReelJudge {
             } else if (180 >= now && now >= 60) {
                 remainder = now - 60;
             } else {
-                remainder = now+180;
+                remainder = now + 180;
             }
         }//リプレイ
         if (role == "ベル" || role == "強ベル") {
@@ -941,6 +957,20 @@ public class ReelJudge {
                 }
             }
         }//中チェ
+        if (role == "7" || role == "バケ") {
+            if (1020 >= now && now >= 400) {
+                remainder = now - 400;
+            } else {
+                remainder = now + (1020 - 400);
+            }
+        }
+        if (role == "V") {
+            if (1020 >= now && now >= 780) {
+                remainder = now - 780;
+            } else {
+                remainder = now + (1020 - 780);
+            }
+        }
     }
 
     private void rightReel() {
@@ -1042,7 +1072,7 @@ public class ReelJudge {
                     } else if (220 >= now && now >= 60) {
                         remainder = now - 60;
                     } else {
-                        remainder = now + 160;
+                        remainder = now + (1020 - 880);
                     }
                     break;
                 default:
@@ -1270,6 +1300,29 @@ public class ReelJudge {
                 }
             }
         }//中チェ
+        if (role == "7") {
+            if (1020 >= now && now >= 540) {
+                remainder = now - 540;
+            } else {
+                remainder = now + (1020 - 540);
+            }
+        }
+        if (role == "バケ") {
+            if (1020 >= now && now >= 840) {
+                remainder = now - 840;
+            } else if (820 >= now && now >= 200) {
+                remainder = now - 200;
+            } else {
+                remainder = now + (1020 - 840);
+            }
+        }
+        if (role=="V"){
+            if (1020 >= now && now >= 920) {
+                remainder = now - 920;
+            } else {
+                remainder = now + (1020 - 920);
+            }
+        }
     }
 
     public void setNow(int now) {
