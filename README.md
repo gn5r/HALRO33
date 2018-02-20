@@ -23,8 +23,6 @@
 - 2018年2月12日(月) ImageScroll リール制御完成
 - 2018年2月15日(木) ImageScroll スロットアプリ完成
 
->>>>>>> dad126305082b1624fbd7288c8938a380f717e0a
-
 ## GPIO早見表
 <div align="center">
 <img src="./img/Pi3GPIO.png" alt="GPIO">
