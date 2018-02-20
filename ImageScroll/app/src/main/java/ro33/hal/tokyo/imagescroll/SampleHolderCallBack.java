@@ -1,35 +1,39 @@
 package ro33.hal.tokyo.imagescroll;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import java.util.concurrent.TimeUnit;
-
-/**
- * Created by shelleden on 2017/12/18.
- */
 
 public class SampleHolderCallBack implements SurfaceHolder.Callback, Runnable {
 
     private SurfaceHolder holder = null;
     private Thread thread = null;
-    private boolean isAttached = true;
-    private ReelJudge reelJudge = new ReelJudge();
+    private boolean isAttached;
+    private ReelJudge reelJudge;
+    private SetPlace setPlace;
+    byte place;
     Resources res;
-    int nowbottom=1398;
+    int nowbottom;
+    int th;
+    int cnt;
 
-    public SampleHolderCallBack(Resources res) {
+    Bitmap bitmap;
+    int w;
+    int h;
+
+    public SampleHolderCallBack(Resources res, Bitmap bitmap, byte place, SetPlace setPlace) {
+        this.setPlace = setPlace;
         this.res = res;
+        this.bitmap = bitmap;
+        w = bitmap.getWidth();
+        h = 1020;
+        nowbottom = 1020;
+        this.place = place;
+        reelJudge=new ReelJudge(setPlace);
     }
 
     @Override
@@ -52,53 +56,130 @@ public class SampleHolderCallBack implements SurfaceHolder.Callback, Runnable {
     @Override
     public void run() {
         // メインループ（無限ループ）
-        // 画像 h = 1398   Log.w("テスト", ""+ h);
-
-        int th;
         while (true) {
-            while (isAttached) {
-
-                Canvas canvas = holder.lockCanvas();
-                // ResourceからBitmapを生成
-                Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.all);
-
-                int w = bitmap.getWidth();
-                int h = bitmap.getHeight();
-
-                if (nowbottom <= 0) {
-                    nowbottom = 1398;
-                }
-
-                if (nowbottom <= 199) {
-                    th = 199 - nowbottom;
-                    Rect src = new Rect(0, 0, w, nowbottom);
-                    Rect dst = new Rect(0, th * 2, w * 2, 199 * 2);
-                    canvas.drawBitmap(bitmap, src, dst, null);
-
-                    Rect sr = new Rect(0, 1398 - th, w, 1398);
-                    Rect ds = new Rect(0, 0, w * 2, (199 - nowbottom) * 2);
-                    canvas.drawBitmap(bitmap, sr, ds, null);
-                    holder.unlockCanvasAndPost(canvas);
-                } else {
-
-                    // 描画元の矩形イメージ
-                    Rect src = new Rect(0, nowbottom - h * 3 / 21, w, nowbottom);
-                    // 描画先の矩形イメージ
-                    Rect dst = new Rect(0, 0, w * 2, 199 * 2);
-                    // 描画処理
-                    canvas.drawBitmap(bitmap, src, dst, null);
-                    holder.unlockCanvasAndPost(canvas);
-                }
-                nowbottom -= 42;
+            if (isAttached == true) {
+                nowbottom -= 20;
+                drawReel();
             }
         }
     }
 
-    public void setIsAttached(boolean isAttached) {
+    public void setisAttached(boolean isAttached, String role) {
         this.isAttached = isAttached;
         reelJudge.setNow(nowbottom);
-        nowbottom = reelJudge.Judge();
+        cnt = reelJudge.Judge(role, place);
+        Log.d("tes1", String.valueOf(nowbottom));
+        Log.d("tes2", String.valueOf(cnt));
+        if (cnt > 0) {
+            for (; cnt > 0; cnt--) {
+                if (nowbottom == 0) {
+                    nowbottom = 1020;
+                }
+                nowbottom -= 20;
+                drawReel();
+            }
+        }
+        switch (place) {
+            case 1:
+                setPlace.setLeft(nowbottom);
+                break;
+            case 2:
+                setPlace.setCenter(nowbottom);
+                break;
+            case 3:
+                setPlace.setRight(nowbottom);
+                break;
+            default:
+                break;
+        }
+
+        Log.d("tes3", String.valueOf(nowbottom));
+        alignment();
+        drawReel();
     }
+
+    public void leverOn(boolean isAttached) {
+        nowbottom = nowbottom - nowbottom % 20;
+        this.isAttached = isAttached;
+    }
+
+    public void drawReel() {
+        Canvas canvas = holder.lockCanvas();
+        // ResourceからBitmapを生成
+
+        if (nowbottom <= 0) {
+            nowbottom = 1020;
+        }
+
+        if (nowbottom <= (h / 21) * 3) {
+            th = (h / 21) * 3 - nowbottom;
+            Rect src = new Rect(0, 4, w, nowbottom);
+            Rect dst = new Rect(0, th * 4, w * 4, (h / 21) * 3 * 4);
+            canvas.drawBitmap(bitmap, src, dst, null);
+
+            Rect sr = new Rect(0, 1020 - th, w, 1020);
+            Rect ds = new Rect(0, 0, w * 4, ((h / 21) * 3 - nowbottom) * 4);
+            canvas.drawBitmap(bitmap, sr, ds, null);
+            holder.unlockCanvasAndPost(canvas);
+        } else {
+
+            // 描画元の矩形イメージ
+            Rect src = new Rect(0, nowbottom - h * 3 / 21, w, nowbottom);
+            // 描画先の矩形イメージ
+            Rect dst = new Rect(0, 0, w * 4, ((h / 21) * 3) * 4);
+            // 描画処理
+            canvas.drawBitmap(bitmap, src, dst, null);
+            holder.unlockCanvasAndPost(canvas);
+        }
+
+    }
+
+    public void alignment() {
+        if (nowbottom == 980) {
+            nowbottom = 975;
+        } else if (nowbottom == 920) {
+            nowbottom = 927;
+        } else if (nowbottom == 880) {
+            nowbottom = 879;
+        } else if (nowbottom == 840) {
+            nowbottom = 830;
+        } else if (nowbottom == 780) {
+            nowbottom = 782;
+        } else if (nowbottom == 740) {
+            nowbottom = 732;
+        } else if (nowbottom == 680) {
+            nowbottom = 682;
+        } else if (nowbottom == 640) {
+            nowbottom = 635;
+        } else if (nowbottom == 580) {
+            nowbottom = 586;
+        } else if (nowbottom == 540) {
+            nowbottom = 537;
+        } else if (nowbottom == 480) {
+            nowbottom = 489;
+        } else if (nowbottom == 440) {
+            nowbottom = 440;
+        } else if (nowbottom == 400) {
+            nowbottom = 392;
+        } else if (nowbottom == 340) {
+            nowbottom = 343;
+        } else if (nowbottom == 300) {
+            nowbottom = 295;
+        } else if (nowbottom == 240) {
+            nowbottom = 246;
+        } else if (nowbottom == 200) {
+            nowbottom = 198;
+        } else if (nowbottom == 140) {
+            nowbottom = 149;
+        } else if (nowbottom == 100) {
+            nowbottom = 101;
+        } else if (nowbottom == 60) {
+            nowbottom = 52;
+        } else {
+            nowbottom = 1020;
+        }
+    }
+
 
 }
 
