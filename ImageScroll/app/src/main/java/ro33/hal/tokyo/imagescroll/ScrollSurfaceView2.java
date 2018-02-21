@@ -8,16 +8,16 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 
-public class ScrollSurfaceView extends SurfaceView {
+public class ScrollSurfaceView2 extends SurfaceView {
     private SampleHolderCallBack cb;
 
     boolean isAttached = false;
 
-    public ScrollSurfaceView(Context context,SetPlace setPlace) {
+    public ScrollSurfaceView2(Context context,SetPlace setPlace) {
         super(context);
         Resources res = this.getContext().getResources();
-        Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.versus_left);
-        byte place = 1;
+        Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.versus_center);
+        byte place = 2;
         SurfaceHolder holder = getHolder();
         cb = new SampleHolderCallBack(res,bitmap,place,setPlace);
         holder.addCallback(cb);
@@ -29,8 +29,7 @@ public class ScrollSurfaceView extends SurfaceView {
             isAttached = false;
         }
     }
-
-
+    
     public void leverOn(){
         if (isAttached == false) {
             cb.leverOn(true);

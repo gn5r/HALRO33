@@ -14,7 +14,10 @@
 - 2017年12月17日(日) Pi3Application再編成。ラズパイ→デバイスとのUDP通信も確認
 - 2017年12月30日(土) Android UDP Sampleアプリケーション若干修正
 - 2018年1月1日(月) 元旦、あけおめ
-- 2017年2月9日(金) Raspberry Piアプリケーション再作成 
+- 2018年2月9日(金) Raspberry Piアプリケーション再作成
+- 2018年2月12日(月) ImageScroll リール制御完成
+- 2018年2月15日(木) ImageScroll スロットアプリ完成
+
 
 ## GPIO早見表
 <div align="center">
